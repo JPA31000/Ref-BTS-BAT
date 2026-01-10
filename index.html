@@ -10,13 +10,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Instrument Sans', sans-serif; }
+        body { 
+            font-family: 'Instrument Sans', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(251, 191, 36, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(251, 191, 36, 0.5); }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
 const { useState, useMemo } = React;
+
 
 const connaissancesGlobales = [
   { id: 1, nom: "Projet de construction et cadre réglementaire", competences: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15"] },
@@ -118,18 +127,14 @@ const data = {
           id: "C1",
           nom: "Analyser un cahier des charges, un contexte, des solutions techniques",
           connaissances: [
-            { nom: "Technologie de la construction", niveau: 4 },
-            { nom: "Mécanique et structure", niveau: 4 },
-            { nom: "Réglementation et normes", niveau: 3 },
-            { nom: "Environnement et développement durable", niveau: 3 }
+            { nom: "Sciences de la construction", niveau: 4 },
+            { nom: "Ouvrages et procédés de réalisation", niveau: 4 }
           ],
           criteres: [
-            "Les données du projet sont recensées et classées",
-            "Les contraintes du site sont identifiées",
-            "Le fonctionnement mécanique est compris et explicité",
-            "Les exigences réglementaires sont identifiées",
-            "L'analyse comparative des solutions techniques est pertinente et multicritère",
-            "Le choix final est justifié"
+            "Le cahier des charges est analysé et explicité par une synthèse",
+            "Les points de vigilance sont identifiés et explicités : besoins, exigences, contraintes, incohérences éventuelles, impossibilités techniques",
+            "Des solutions techniques sont analysées et/ou comparées selon plusieurs critères : technologie, mise en œuvre, coût, impact environnemental, sécurité",
+            "Un choix technique est réalisé et justifié"
           ],
           taches: ["T1.1", "T1.2"]
         },
@@ -137,17 +142,16 @@ const data = {
           id: "C2",
           nom: "Proposer une solution technique pour le projet, pour une variante ou des travaux supplémentaires",
           connaissances: [
-            { nom: "Technologie de la construction", niveau: 4 },
-            { nom: "Mécanique et structure", niveau: 4 },
-            { nom: "Dessin technique et modélisation", niveau: 3 },
-            { nom: "Matériaux", niveau: 3 }
+            { nom: "Sciences de la construction", niveau: 4 },
+            { nom: "Ouvrages et procédés de réalisation", niveau: 4 }
           ],
           criteres: [
-            "La solution technique proposée est réalisable et conforme aux règles de l'art",
-            "Le dimensionnement des éléments de structure courants est correct",
-            "Les croquis et schémas sont clairs, précis et normalisés",
-            "Les interfaces entre les différents éléments d'ouvrage sont traitées",
-            "La solution prend en compte les aspects de prévention des risques et d'impact environnemental"
+            "Les charges mécaniques sont décrites et estimées pour un ouvrage élémentaire courant de structure en béton armé, en bois ou en acier",
+            "Un modèle mécanique est proposé",
+            "Un calcul de dimensionnement manuel est réalisé (semelles, poutres isostatiques, poutres continues, porte à faux, fixations, poteaux)",
+            "Un équipement de chantier ou de réalisation est dimensionné ou vérifié : étaiement, plateforme de sécurité, coffrage, garde-corps, apparaux de levage",
+            "La solution technique est proposée et justifiée par rapport aux exigences réglementaires et au cahier des charges",
+            "La solution technique est représentée sous forme de croquis ou de schémas"
           ],
           taches: ["T1.3", "T1.4", "T1.5"]
         },
@@ -155,14 +159,12 @@ const data = {
           id: "C3",
           nom: "Estimer économiquement une étude d'avant-projet",
           connaissances: [
-            { nom: "Étude des prix et économie de la construction", niveau: 3 },
-            { nom: "Métré", niveau: 3 }
+            { nom: "Économie de la construction", niveau: 4 }
           ],
           criteres: [
-            "Les quantités sont calculées avec précision (avant-métré)",
-            "Les prix unitaires sont établis ou recherchés dans une base de prix",
-            "Le devis estimatif est établi correctement",
-            "L'offre commerciale est rédigée de manière professionnelle"
+            "Le quantitatif d'une partie d'ouvrage est établi",
+            "Le prix de vente d'une partie d'ouvrage est établi à partir de données fournies",
+            "La proposition technique et commerciale est finalisée"
           ],
           taches: ["T1.6"]
         }
@@ -191,27 +193,31 @@ const data = {
           },
           resultatsAttendus: {
             "T2.1": [
-              "Les caractéristiques et les contraintes du site sont identifiées (accès, réseaux, riverains, topographie, géotechnique…)",
-              "Les intervenants et leurs rôles sont identifiés",
-              "Les pièces écrites et graphiques sont analysées et mises en cohérence",
-              "Les délais et les phases de travaux sont identifiés"
+              "Une synthèse globale justifiée et structurée est rédigée en prenant en compte : les besoins, les exigences, les contraintes, les incohérences éventuelles, les impossibilités techniques"
             ],
             "T2.2": [
-              "La structure porteuse est identifiée",
-              "Le cheminement des charges (verticales et horizontales) est identifié",
-              "Le comportement de la structure est analysé qualitativement"
+              "Les plans de structure sont produits",
+              "Les éléments porteurs et leurs impacts sont identifiés",
+              "Les incohérences éventuelles sont relevées",
+              "Des solutions simples et adaptées sont proposées",
+              "Des plans d'exécution sont réalisés"
             ],
             "T2.3": [
-              "Les risques professionnels liés à la coactivité et à l'environnement extérieur sont recensés",
-              "Les risques professionnels liés à l'exécution des ouvrages sont recensés"
+              "Le PGCSPS est analysé s'il existe",
+              "Le PPSPS est complété par le PIC, les modes opératoires…",
+              "Les risques sont identifiés et évalués",
+              "Les moyens de prévention sont choisis en fonction de cette évaluation et des principes généraux de prévention"
             ],
             "T2.4": [
-              "Les contraintes environnementales du site sont recensées (déchets, nuisances sonores, pollutions, biodiversité…)",
-              "Les exigences environnementales du projet sont identifiées (certifications, labels, matériaux biosourcés, réemploi…)"
+              "Les risques environnementaux sont anticipés",
+              "Les acteurs sont identifiés",
+              "Les documents réglementaires et normatifs sont connus et complétés",
+              "Les méthodes de gestion des déchets sont mises en place",
+              "L'impact environnemental est optimisé"
             ],
             "T2.5": [
-              "Les exigences de qualité du projet sont identifiées (parements, tolérances, étanchéité à l'air…)",
-              "Les points singuliers et les interfaces critiques sont repérés"
+              "Le CCTP est analysé en identifiant les exigences de qualité",
+              "Les points singuliers et les interfaces sur chantier sont identifiés"
             ]
           },
           taches: [
@@ -240,46 +246,52 @@ const data = {
           },
           resultatsAttendus: {
             "T2.6": [
-              "Les démarches administratives obligatoires sont listées (DICT, voirie, installations…)",
-              "Les raccordements aux réseaux sont anticipés",
-              "L'état des lieux contradictoire (voirie, avoisinants) est préparé"
+              "Les services compétents (DREETS, CARSAT, OPPBTP…) sont informés de l'ouverture du chantier",
+              "À partir de la déclaration de travaux, les DICT sont demandées, étudiées et exploitées",
+              "Les autorisations nécessaires (voirie, survol, engins de levage…) sont demandées aux services compétents"
             ],
             "T2.7": [
-              "Les modes constructifs sont définis et argumentés (technique, coût, sécurité, environnement)",
-              "La préfabrication ou la réalisation in situ est justifiée",
-              "Le phasage général des travaux est établi"
+              "Le planning de chantier objectif est réalisé à partir du planning client (ajout d'une marge de sécurité)",
+              "Les modes constructifs possibles sont comparés et le choix est justifié en fonction des contraintes techniques, économiques, environnementales et de prévention",
+              "Un tableau de synthèse est réalisé"
             ],
             "T2.8": [
-              "Les besoins en main d'œuvre sont évalués",
-              "Les matériels principaux sont choisis et dimensionnés (levage, bétonnage, étaiement…)",
-              "Les consultations fournisseurs et sous-traitants sont préparées"
+              "Les équipes sont définies",
+              "Le type et la quantité de matériel sont définis et optimisés",
+              "La charge de grue est réalisée et est cohérente",
+              "Le type et la quantité de matériaux sont définis et optimisés",
+              "Le mode de fabrication du béton est choisi"
             ],
             "T2.9": [
-              "Les tâches sont ordonnancées et les durées sont calculées",
-              "Le chemin critique est identifié",
-              "Le planning est optimisé (lissage des ressources)",
-              "Les besoins en ressources (matériel, main d'œuvre) sont histogrammés"
+              "Les ouvrages élémentaires sont décomposés et quantifiés",
+              "Le planning réalisé fait apparaître : la décomposition des tâches, l'enclenchement des tâches, la durée des tâches, les cadences",
+              "Les jours non travaillés (congés, jours fériés, jours prévus pour intempéries) sont intégrés",
+              "Les principales phases de logistique (livraisons…), les dates-jalons, le phasage si besoin sont définis",
+              "La courbe de main d'œuvre est établie"
             ],
             "T2.10": [
-              "Les cycles de rotation (banches, planchers) sont définis",
-              "La saturation des moyens de levage est vérifiée"
+              "Le cyclage des verticaux et des horizontaux est réalisé",
+              "La rotation du matériel (coffrage et sécurité) est réalisable, cohérente voire optimisée",
+              "Le calepinage des éléments préfabriqués est défini"
             ],
             "T2.11": [
-              "Les zones de cantonnement, de stockage, de circulation et de travail sont définies et optimisées",
-              "Les réseaux provisoires sont dimensionnés et tracés",
-              "La sécurité du chantier et des tiers est assurée (clôtures, signalisation, accès…)",
-              "Les contraintes environnementales sont traitées (gestion des déchets, eaux de lavage…)"
+              "Le plan d'installation de chantier est réalisé et mis à jour selon l'avancement du chantier",
+              "Les moyens relatifs aux exigences de qualité, de prévention et environnementales sont définis",
+              "Les engins de levage sont choisis, dimensionnés et positionnés en intégrant les phases de montage et de démontage",
+              "Les zones de stockage sont définies",
+              "La base vie, les accès, les circulations piétons et engins, les clôtures, les réseaux, les zones de stockage des déchets, les zones de terrassement, la zone d'approvisionnement sont définis"
             ],
             "T2.12": [
-              "Les modes opératoires détaillés sont rédigés et illustrés (croquis de phases)",
-              "Les mesures de prévention des risques (EPC, EPI) sont intégrées",
-              "Les points d'arrêt et de contrôle qualité sont définis",
-              "Les dispositions environnementales sont précisées"
+              "Les risques sont identifiés et évalués",
+              "Les moyens de prévention sont choisis en fonction de cette évaluation",
+              "Les points singuliers et les interfaces sur chantier sont identifiés",
+              "Le matériel est choisi et adapté",
+              "Les méthodes d'exécution sont définies"
             ],
             "T2.13": [
-              "Le déboursé sec prévisionnel est calculé (matériaux, main d'œuvre, matériel)",
-              "Les frais de chantier sont estimés",
-              "La marge prévisionnelle est dégagée"
+              "Les éléments suivants sont budgétés dans le cadre d'un déboursé sec d'un ouvrage élémentaire : main d'œuvre, matériaux, matériels, sous-traitants",
+              "Les frais de chantier sont évalués",
+              "Pour budgéter les matériaux et le matériel, les fournisseurs sont consultés"
             ]
           },
           taches: [
@@ -299,14 +311,16 @@ const data = {
           id: "C4",
           nom: "Analyser et finaliser la structure en fonction des choix constructifs",
           connaissances: [
-            { nom: "Mécanique des structures", niveau: 4 },
-            { nom: "Technologie de la construction", niveau: 4 },
-            { nom: "Matériaux", niveau: 3 }
+            { nom: "Sciences de la construction", niveau: 4 },
+            { nom: "Ouvrages et procédés de réalisation", niveau: 4 }
           ],
           criteres: [
-            "Le comportement de la structure en phase provisoire et définitive est analysé",
-            "Les choix constructifs sont adaptés aux contraintes structurelles",
-            "La stabilité de l'ouvrage en phase de construction est vérifiée"
+            "Les éléments nécessaires à l'étude et à la préparation de chantier sont identifiés dans un dossier marché et explicités dans une note de synthèse",
+            "Le fonctionnement de la structure porteuse d'un bâtiment est analysé : plans d'avant-projet structure, éléments porteurs, schéma de cheminement des charges",
+            "Des hypothèses de chargement sont formulées et justifiées, des solutions simples et adaptées sont proposées",
+            "Une descente de charges est réalisée avec un outil informatique et contrôlée sur un élément isolé",
+            "Des plans d'exécution sont réalisés avec des progiciels 2D ou 3D, les normes de dessins sont respectées",
+            "La maquette BIM « structure » d'une partie de l'ouvrage est finalisée"
           ],
           taches: ["T2.1", "T2.2"]
         },
@@ -314,14 +328,13 @@ const data = {
           id: "C5",
           nom: "Analyser et définir les moyens relatifs aux exigences de qualité, de prévention et d'environnement",
           connaissances: [
-            { nom: "Qualité, Sécurité, Environnement (QSE)", niveau: 4 },
-            { nom: "Réglementation du travail", niveau: 3 }
+            { nom: "Connaissances transversales", niveau: 4 }
           ],
           criteres: [
-            "Les risques spécifiques au chantier sont identifiés (PPSPS)",
-            "Les moyens de prévention collective et individuelle sont définis",
-            "Les exigences environnementales sont traduites en moyens concrets",
-            "Le plan de contrôle qualité est ébauché"
+            "Les enjeux et procédures liés à la prévention des risques sont analysés : PGC, PPSPS, risques identifiés et évalués, moyens de prévention choisis",
+            "Le travail en hauteur est pris en compte",
+            "Les enjeux et procédures liés à l'impact environnemental sont analysés : risques anticipés, documents réglementaires, gestion des déchets",
+            "Les enjeux et procédures liés à la qualité sont analysés : CCTP, exigences de qualité, sur-exigences et impossibilités identifiées"
           ],
           taches: ["T2.3", "T2.4", "T2.5"]
         },
@@ -329,13 +342,13 @@ const data = {
           id: "C6",
           nom: "Réaliser les démarches nécessaires à l'ouverture du chantier",
           connaissances: [
-            { nom: "Droit de la construction et urbanisme", niveau: 2 },
-            { nom: "Gestion administrative de chantier", niveau: 3 }
+            { nom: "Préparation et organisation de chantier", niveau: 4 }
           ],
           criteres: [
-            "La liste des démarches est exhaustive et chronologique",
-            "Les documents administratifs sont complétés correctement",
-            "Les délais administratifs sont intégrés dans la planification"
+            "Les services compétents (DREETS, CARSAT, OPPBTP…) sont informés de l'ouverture du chantier",
+            "Les éléments nécessaires à la DICT sont préparés sur un document",
+            "L'Intervention à Proximité des Réseaux est analysée",
+            "Les autorisations nécessaires (voirie, survol, engins de levage…) sont complétées"
           ],
           taches: ["T2.6"]
         },
@@ -343,13 +356,16 @@ const data = {
           id: "C7",
           nom: "Choisir et définir les moyens nécessaires à l'organisation du chantier",
           connaissances: [
-            { nom: "Matériels de chantier", niveau: 4 },
-            { nom: "Organisation de chantier", niveau: 4 }
+            { nom: "Préparation et organisation de chantier", niveau: 4 },
+            { nom: "Ouvrages et procédés de réalisation", niveau: 4 },
+            { nom: "Économie de la construction", niveau: 4 }
           ],
           criteres: [
-            "Le choix des engins est justifié",
-            "Le plan d'installation de chantier (PIC) est complet et réglementaire",
-            "L'installation de chantier optimise les flux et la sécurité"
+            "Le délai d'exécution objectif est défini à partir du délai client en incluant les marges et aléas",
+            "Les modes constructifs possibles sont comparés, le choix est justifié et un tableau de synthèse est réalisé",
+            "Le choix de la cinématique de réalisation permet de valider le planning objectif",
+            "Les crédits d'heures sont calculés et les équipes sont définies",
+            "Le type et la quantité de matériel, matériaux et consommables sont définis et optimisés"
           ],
           taches: ["T2.7", "T2.8"]
         },
@@ -357,15 +373,13 @@ const data = {
           id: "C8",
           nom: "Réaliser le planning d'exécution détaillé",
           connaissances: [
-            { nom: "Planification et ordonnancement", niveau: 4 },
-            { nom: "Méthodes de construction", niveau: 4 }
+            { nom: "Préparation et organisation de chantier", niveau: 4 }
           ],
           criteres: [
-            "Le découpage en tâches est pertinent",
-            "Les durées sont calculées à partir de temps unitaires fiables",
-            "L'enchaînement des tâches respecte les contraintes techniques",
-            "Le planning respecte le délai global contractuel",
-            "Les ressources sont lissées"
+            "Les ouvrages élémentaires sont décomposés et quantifiés",
+            "Le planning d'exécution détaillé fait apparaître : décomposition et enclenchement des tâches, durées, cadences, jours non travaillés",
+            "Les principales phases logistiques, dates-jalons et phasage sont intégrés",
+            "La courbe de main d'œuvre est établie"
           ],
           taches: ["T2.9"]
         },
@@ -373,14 +387,15 @@ const data = {
           id: "C9",
           nom: "Élaborer les processus de réalisation détaillés et les modes opératoires",
           connaissances: [
-            { nom: "Méthodes et procédés d'exécution", niveau: 4 },
-            { nom: "Sécurité et prévention", niveau: 4 }
+            { nom: "Préparation et organisation de chantier", niveau: 4 },
+            { nom: "Ouvrages et procédés de réalisation", niveau: 4 }
           ],
           criteres: [
-            "Les modes opératoires sont décrits chronologiquement",
-            "Les croquis de phase sont explicites",
-            "La sécurité est intégrée à chaque étape",
-            "Les points de contrôle sont identifiés"
+            "Le plan d'installation de chantier est réalisé en plan et en coupe : emprise, engins de levage, base vie, clôtures, réseaux, zones de stockage",
+            "Le mode de fabrication du béton est choisi",
+            "Des modes opératoires sur chantier sont élaborés : décomposition chronologique, procédés d'exécution, matériels, risques évalués, moyens de prévention",
+            "Des rotations de matériels et de poses des éléments industriels sont réalisées : cyclage, rotation du matériel, calepinage",
+            "L'interface avec les autres corps d'états est traitée, les points singuliers sont analysés"
           ],
           taches: ["T2.10", "T2.11", "T2.12"]
         },
@@ -388,12 +403,12 @@ const data = {
           id: "C10",
           nom: "Établir le budget prévisionnel de l'opération",
           connaissances: [
-            { nom: "Gestion financière de chantier", niveau: 3 }
+            { nom: "Économie de la construction", niveau: 4 }
           ],
           criteres: [
-            "Tous les postes de dépenses sont pris en compte",
-            "Les hypothèses de coût sont réalistes",
-            "Le budget prévisionnel est présenté clairement"
+            "Le déboursé sec d'un ouvrage élémentaire est budgété : main d'œuvre, matériaux, matériels, consommables, sous-traitants",
+            "Les frais de chantier sont listés",
+            "Pour budgéter les matériaux et le matériel, les fournisseurs sont éventuellement consultés"
           ],
           taches: ["T2.13"]
         }
@@ -409,43 +424,55 @@ const data = {
           nom: "Suivi d'un projet",
           conditionsExercice: {
             moyens: [
-              "Dossier marché",
-              "Dossier d'exécution (plans, planning, budget)",
-              "Documents de suivi (rapports journaliers, bons de livraison…)",
-              "Réunions de chantier",
-              "Outils de gestion et de planification"
+              "Dossier marché (CCTP, plans d'architecte, études de sols, PGC, plan de prévention…)",
+              "Dossier d'exécution",
+              "Dossier méthodes (PIC, plannings, rotations, phasage, sécurité, modes opératoires…)",
+              "Données du site (bâtiment neuf ou existant)",
+              "Base de données entreprise (temps unitaires, cadences…)",
+              "Réglementations, normes, certifications en vigueur",
+              "Démarche QSE de l'entreprise",
+              "Démarche RSE de l'entreprise si elle existe (démarche bas carbone…)",
+              "Environnement professionnel de l'entreprise (progiciels, matériel, outils numériques, formulaires…)"
             ],
             autonomie: "Partielle"
           },
           resultatsAttendus: {
             "T3.1": [
-              "L'avancement réel est comparé au planning prévisionnel",
-              "Les écarts sont analysés et des mesures correctives sont proposées",
-              "Le planning est recalé"
+              "La visite du chantier est effectuée",
+              "L'état d'avancement des ouvrages est estimé",
+              "La mise en place des dispositifs de sécurité est contrôlée tout au long du chantier",
+              "La conformité des ouvrages est vérifiée",
+              "L'avancement des travaux est reporté sur le planning d'exécution"
             ],
             "T3.2": [
-              "Les quantités réalisées sont relevées contradictoirement",
-              "Les états d'acomptes sont établis",
-              "Les travaux modificatifs sont valorisés"
+              "Les situations sont établies suivant l'avancement des travaux",
+              "Les données sont transmises pour facturation",
+              "Les dépenses communes sont transmises pour établissement des factures du compte prorata"
             ],
             "T3.3": [
-              "Les fiches de contrôle et d'autocontrôle sont renseignées",
-              "Les non-conformités sont traitées",
-              "Le dossier des ouvrages exécutés (DOE) est alimenté au fil de l'eau"
+              "Le plan d'assurance qualité de l'entreprise est appliqué (points d'arrêt, points de contrôle, mesures de reprise, gestion des non-conformités...)",
+              "Les ouvrages sont contrôlés tout au long du projet",
+              "Les données du projet sont suivies et mises à jour",
+              "Les résultats sont consignés et réalisés"
             ],
             "T3.4": [
-              "La réunion est préparée (points à aborder, documents)",
-              "La participation est active et constructive",
-              "Un compte-rendu ou un relevé de décisions est rédigé ou exploité"
+              "Le contenu de la communication est adapté au contexte et à l'interlocuteur (arguments, éléments de langage…)",
+              "Les moyens de communication sont appropriés au contexte",
+              "Les communications sont préparées",
+              "Les interventions sont assurées, suivies, comprises par les destinataires, et contrôlées avec la qualité attendue",
+              "Les arguments des interlocuteurs sont pris en compte",
+              "Les comptes rendus formels et informels sont assurés à l'écrit ou à l'oral et conformes aux attendus"
             ],
             "T3.5": [
-              "La conformité des ouvrages aux règles de l'art est vérifiée",
-              "Les évolutions réglementaires sont prises en compte"
+              "Les réglementations, normes, recommandations et certifications en vigueur sont connues et appliquées",
+              "La veille technologique est assurée"
             ],
             "T3.6": [
-              "Les dépenses réelles sont suivies et comparées au budget",
-              "Les écarts sont analysés",
-              "Le reste à dépenser est estimé"
+              "Le contrôle des factures des fournisseurs est réalisé",
+              "Le suivi des crédits d'heures est assuré",
+              "Le suivi de la consommation des produits et matériaux est fait",
+              "Les résultats intermédiaires sont analysés en vue d'une optimisation éventuelle",
+              "Les écarts avec le budget sont analysés, le budget est éventuellement recalé"
             ]
           },
           taches: [
@@ -462,40 +489,64 @@ const data = {
           nom: "Encadrement d'un projet",
           conditionsExercice: {
             moyens: [
-              "Équipe de chantier (compagnons, intérimaires, sous-traitants)",
-              "PPSPS, Plan de prévention",
-              "Matériel et matériaux",
-              "Outils de communication"
+              "Dossier marché (CCTP, plans d'architecte, études de sols, PGC…)",
+              "Dossier d'exécution",
+              "Dossier méthodes (PIC, plannings, rotations, phasage, sécurité, modes opératoires…)",
+              "Données du site (bâtiment neuf ou existant)",
+              "Base de données entreprise (temps unitaires, cadences…)",
+              "Réglementations, normes, certifications en vigueur",
+              "Démarche QSE de l'entreprise",
+              "Démarche RSE de l'entreprise si elle existe (démarche bas carbone…)",
+              "Environnement professionnel de l'entreprise (progiciels, matériel, outils numériques, formulaires…)"
             ],
             autonomie: "Partielle"
           },
           resultatsAttendus: {
             "T3.7": [
-              "Les relations avec la maîtrise d'œuvre, la maîtrise d'ouvrage et les autres corps d'état sont gérées professionnellement",
-              "La coordination avec les sous-traitants est assurée"
+              "Les différents intervenants sont identifiés",
+              "Les interfaces avec les autres corps d'état sont définies ou prises en compte",
+              "La mutualisation des moyens est analysée",
+              "La coactivité est anticipée et gérée",
+              "Les rôles et responsabilités de chacun sont identifiés",
+              "Les relations et interfaces avec les parties prenantes sont préparées et assurées (MOA, MOE, riverains, concessionnaires, CARSAT, DREETS…)"
             ],
             "T3.8": [
-              "Les tâches sont réparties et les consignes sont données clairement",
-              "Le travail est contrôlé et accompagné",
-              "L'accueil des nouveaux arrivants est réalisé",
-              "La communication interne est favorisée"
+              "L'accueil, l'information, la formation des équipes sont réalisés",
+              "La présentation des travaux confiés à l'équipe est préparée",
+              "Les rôles et responsabilités de chacun sont définis, attribués, délégués si besoin",
+              "L'animation de l'équipe est assurée",
+              "Les règles de travail de l'entreprise et du chantier sont mises en œuvre",
+              "Les imprévus, difficultés ou conflits de l'équipe sont pris en compte et sont gérés",
+              "La posture de représentant de l'entreprise est adaptée aux différents contextes"
             ],
             "T3.9": [
-              "Les protections collectives et individuelles sont mises en place et maintenues",
-              "Les consignes de sécurité sont diffusées et expliquées (quarts d'heure sécurité)",
-              "Les situations dangereuses sont détectées et traitées immédiatement",
-              "Les autorisations de conduite et habilitations sont vérifiées"
+              "Les salariés sont accueillis (livret et fiche d'accueil) et la formation au poste de travail est dispensée",
+              "Les documents réglementaires sont contrôlés et appliqués (habilitations, certifications, CACES, autorisations…)",
+              "Les règles, les moyens de prévention et de protection sont appliqués",
+              "Les informations et les formations sont mises en œuvre (quart d'heure sécurité, nutrition, éveil musculaire, postures)",
+              "Les situations à risques sont identifiées, traitées et les parties prenantes en sont informées",
+              "Les moyens de prévention prévus sont adaptés en continu au site",
+              "Les situations d'urgence, les incidents, les presqu'accidents sont gérés",
+              "Les consignes de vérification, d'utilisation et de guidage des matériels et outils sont contrôlées et appliquées",
+              "Les équipements sont contrôlés (sécurité, étalonnage)",
+              "La VGP des équipements est à jour et les réserves sont levées",
+              "Les marquages, la signalisation de chantier et les protections sont maintenus en état"
             ],
             "T3.10": [
-              "Le tri des déchets est effectif et suivi",
-              "Les nuisances sont limitées",
-              "Les procédures en cas de pollution accidentelle sont connues et appliquées"
+              "L'empreinte environnementale du chantier est minimisée",
+              "La gestion des déchets est contrôlée et appliquée",
+              "Les prestataires d'évacuation sont identifiés",
+              "Les stations de lavage sont en place",
+              "Les contraintes et les risques de nuisances sont traités (bruit, pollution)",
+              "Les ressources sont économisées dans le cadre d'une démarche écoresponsable"
             ],
             "T3.11": [
-              "Les approvisionnements sont planifiés et réceptionnés",
-              "Le stockage est organisé et géré",
-              "L'entretien et la maintenance du matériel sont suivis",
-              "Les flux logistiques sur le chantier sont fluidifiés"
+              "Les plannings de livraison sont établis et coordonnés (DHOL)",
+              "Le suivi et le contrôle des commandes et des livraisons des matériels et des matériaux sont assurés et explicités",
+              "Les zones de stockage et de livraison sont respectées",
+              "Les procédures de maintenance et de dépannage sont appliquées",
+              "Les démarches d'optimisation sont initiées",
+              "Les tâches à zéro valeur ajoutée sont éliminées"
             ]
           },
           taches: [
@@ -512,41 +563,48 @@ const data = {
           id: "C11",
           nom: "Assurer le suivi de l'opération",
           connaissances: [
-            { nom: "Gestion de projet", niveau: 3 },
-            { nom: "Gestion financière", niveau: 3 }
+            { nom: "Préparation et organisation de chantier", niveau: 4 },
+            { nom: "Économie de la construction", niveau: 4 }
           ],
           criteres: [
-            "Les outils de suivi sont tenus à jour",
-            "Les écarts planning/budget sont détectés précocement",
-            "Les situations de travaux sont exactes et justifiées"
+            "La gestion des plannings est suivie, analysée, et des ajustements sont proposés si besoin",
+            "La participation à une réunion est effective et un compte rendu est rédigé",
+            "Les situations d'avancement de travaux sont analysées",
+            "Un relevé de cadence et de consommations est réalisé sur la production d'un ouvrage",
+            "La procédure de suivi des coûts du chantier est analysée",
+            "Les écarts entre le prévisionnel et le réel sont analysés et des actions correctives sont proposées",
+            "La réception des ouvrages est préparée et formalisée dans une fiche"
           ],
-          taches: ["T3.1", "T3.2", "T3.6"]
+          taches: ["T3.1", "T3.2", "T3.4", "T3.6", "T3.11"]
         },
         {
           id: "C12",
           nom: "Participer au management d'une équipe",
           connaissances: [
-            { nom: "Management d'équipe", niveau: 3 },
-            { nom: "Communication professionnelle", niveau: 3 }
+            { nom: "Connaissances transversales", niveau: 4 }
           ],
           criteres: [
-            "La communication avec l'équipe est claire et respectueuse",
-            "L'organisation du travail de l'équipe est efficace",
-            "Les conflits éventuels sont gérés ou signalés"
+            "Des activités de management observées sont analysées : accueil, formation au poste, information des équipes",
+            "Les différents intervenants sont identifiés et leur rôle est explicité, les interfaces avec les autres corps d'état sont explicitées",
+            "La communication orale et écrite est adaptée à la situation et à l'interlocuteur",
+            "Une consigne de réalisation d'une tâche est transmise et explicitée à partir de la lecture de plans",
+            "Les comptes rendus formels et informels sont assurés à l'écrit ou à l'oral",
+            "La collaboration et l'encadrement de la réalisation des projets sont observés et analysés"
           ],
-          taches: ["T3.4", "T3.7", "T3.8", "T3.11"]
+          taches: ["T3.7", "T3.8"]
         },
         {
           id: "C13",
-          nom: "Participer à la mise en œuvre des mesures de sécurité, environnementales et qualité",
+          nom: "Participer à la mise en œuvre des mesures de sécurité des personnes et des biens, des mesures environnementales et de la démarche qualité",
           connaissances: [
-            { nom: "QSE", niveau: 4 },
-            { nom: "Réglementation", niveau: 3 }
+            { nom: "Connaissances transversales", niveau: 4 }
           ],
           criteres: [
-            "Les règles de sécurité sont appliquées sur le terrain",
-            "Le tri des déchets et la propreté du chantier sont assurés",
-            "Les contrôles qualité sont réalisés et tracés"
+            "La prévention des risques pour la santé et la sécurité est analysée : documents réglementaires, situations à risques, moyens de prévention, gestion des situations d'urgence",
+            "Les consignes de vérification, d'utilisation et de guidage des matériels et outils sont maîtrisées",
+            "La VGP et le contrôle des équipements sont suivis",
+            "Les démarches environnementales sont analysées : documents réglementaires, gestion des déchets, traitement des eaux, nuisances",
+            "Le processus management qualité de l'entreprise est analysé : plan d'assurance qualité, contrôle des ouvrages, fiches d'autocontrôle"
           ],
           taches: ["T3.3", "T3.5", "T3.9", "T3.10"]
         }
@@ -562,23 +620,27 @@ const data = {
           nom: "Réception et implantation",
           conditionsExercice: {
             moyens: [
-              "Plans d'exécution, plans de bornage",
-              "Appareils de topographie (niveau, théodolite, station totale, GNSS)",
-              "Ouvrages existants ou supports"
+              "Dossier marché (CCTP, plans d'architecte, études de sols, PGC…)",
+              "Dossier d'exécution",
+              "Dossier méthodes (PIC, plannings, rotations, phasage, sécurité, modes opératoires…)",
+              "Données du site (bâtiment neuf ou existant)",
+              "Base de données entreprise (temps unitaires, cadences…)",
+              "Réglementations, normes, certifications en vigueur",
+              "Démarche QSE de l'entreprise",
+              "Démarche RSE de l'entreprise si elle existe (démarche bas carbone…)",
+              "Environnement professionnel de l'entreprise (progiciels, matériel, outils numériques, formulaires…)"
             ],
-            autonomie: "Totale sur des ouvrages courants"
+            autonomie: "Partielle"
           },
           resultatsAttendus: {
             "T4.1": [
-              "La conformité des supports (altimétrie, planimétrie, état de surface) est vérifiée",
-              "Les réservations et interfaces avec les autres corps d'état sont contrôlées",
-              "Un procès-verbal de réception de support est établi si nécessaire"
+              "Le plan de contrôle est établi en précisant les tolérances requises",
+              "Le relevé des supports en altimétrie et planimétrie est effectué",
+              "La fiche de réception du lot en interface est établie en indiquant, le cas échéant, les mesures correctives exigées"
             ],
             "T4.2": [
-              "Les repères de référence sont identifiés et vérifiés",
-              "L'implantation est réalisée avec la précision requise (axes, nus, niveaux)",
-              "Les traits de niveau et axes sont matérialisés durablement",
-              "Un plan de récolement de l'implantation peut être établi"
+              "L'implantation des limites du chantier est matérialisée, ainsi que la localisation des principales zones du chantier (accès, stockages, sécurités…)",
+              "L'implantation des ouvrages est réalisée"
             ]
           },
           taches: [
@@ -591,20 +653,25 @@ const data = {
           nom: "Contrôle et validation",
           conditionsExercice: {
             moyens: [
-              "CCTP, normes, DTU",
-              "Fiches techniques produits",
-              "Appareils de mesure et de contrôle",
-              "Ouvrages réalisés"
+              "Dossier marché (CCTP, plans d'architecte, études de sols, PGC…)",
+              "Dossier d'exécution",
+              "Dossier méthodes (PIC, plannings, rotations, phasage, sécurité, modes opératoires…)",
+              "Données du site (bâtiment neuf ou existant)",
+              "Base de données entreprise (temps unitaires, cadences…)",
+              "Réglementations, normes, certifications en vigueur",
+              "Démarche QSE de l'entreprise",
+              "Démarche RSE de l'entreprise si elle existe (démarche bas carbone…)",
+              "Environnement professionnel de l'entreprise (progiciels, matériel, outils numériques, formulaires…)"
             ],
             autonomie: "Partielle"
           },
           resultatsAttendus: {
             "T4.3": [
-              "La conformité des matériaux livrés est vérifiée (quantité, qualité, références)",
-              "La mise en œuvre est contrôlée en cours d'exécution",
-              "Les ouvrages finis sont contrôlés (aspect, dimensions, fonctionnalités)",
-              "Les essais et épreuves sont organisés et suivis (béton, étanchéité...)",
-              "Les levées de réserves sont gérées"
+              "Les fiches de réceptions sont remplies",
+              "Les contrôles des solutions techniques et des matériaux sont réalisés",
+              "Les contrôles des ouvrages sont réalisés conformément au plan de contrôle",
+              "Les fiches de contrôles sont établies et transmises",
+              "Les non conformités sont identifiées et traitées"
             ]
           },
           taches: [
@@ -617,13 +684,14 @@ const data = {
           id: "C14",
           nom: "Implanter et vérifier les caractéristiques géométriques des ouvrages",
           connaissances: [
-            { nom: "Topographie", niveau: 4 },
-            { nom: "Géométrie", niveau: 3 }
+            { nom: "Implantations - Contrôles", niveau: 4 }
           ],
           criteres: [
-            "Les appareils topographiques sont utilisés correctement",
-            "L'implantation est précise et conforme aux plans",
-            "Les relevés sont exacts et exploitables"
+            "Des points ou des axes sont implantés : travaux préparés, données établies de manière informatique, implantations réalisées et contrôlées",
+            "Les traits de niveau sont positionnés",
+            "Les interfaces sont validées",
+            "Des coffrages, des inserts sont tracés pour les ouvrages courants",
+            "Les relevés d'ouvrages sont réalisés suivant un plan de contrôle : géométrie, dimensions, positionnement"
           ],
           taches: ["T4.1", "T4.2"]
         },
@@ -631,13 +699,13 @@ const data = {
           id: "C15",
           nom: "Contrôler les matériaux, les ouvrages et les solutions techniques",
           connaissances: [
-            { nom: "Technologie des matériaux", niveau: 3 },
-            { nom: "Procédures de contrôle", niveau: 3 }
+            { nom: "Sciences de la construction", niveau: 4 }
           ],
           criteres: [
-            "Les matériaux sont contrôlés à la livraison",
-            "Les non-conformités sont identifiées et traitées",
-            "La conformité finale de l'ouvrage est vérifiée par rapport au marché"
+            "Le protocole de réalisation des essais est assuré : objectif identifié, paramètres à contrôler identifiés, protocole défini",
+            "Le matériel est préparé et l'essai est réalisé",
+            "Les résultats sont exploités et analysés",
+            "Les caractéristiques environnementales et le bilan carbone sont analysés"
           ],
           taches: ["T4.3"]
         }
@@ -681,16 +749,19 @@ function FormulaireBTSEBCR() {
     [currentBloc, selectedCompetence]
   );
 
+  // Calcul des compétences disponibles selon la tâche sélectionnée
   const availableCompetences = useMemo(() => {
     if (!currentBloc) return [];
     
     if (selectedTache && currentTache) {
+      // Si une tâche est sélectionnée, ne montrer que les compétences liées à cette tâche
       return currentBloc.competences.filter(comp => 
         currentTache.competences?.includes(comp.id)
       );
     }
     
     if (selectedPole && currentPole) {
+      // Si un pôle est sélectionné, montrer les compétences liées à toutes les tâches du pôle
       const competenceIds = new Set();
       currentPole.taches.forEach(tache => {
         tache.competences?.forEach(compId => competenceIds.add(compId));
@@ -698,6 +769,7 @@ function FormulaireBTSEBCR() {
       return currentBloc.competences.filter(comp => competenceIds.has(comp.id));
     }
     
+    // Sinon, montrer toutes les compétences du bloc
     return currentBloc.competences;
   }, [currentBloc, currentPole, currentTache, selectedPole, selectedTache]);
 
@@ -718,146 +790,274 @@ function FormulaireBTSEBCR() {
   const handlePoleChange = (value) => {
     setSelectedPole(value || null);
     setSelectedTache(null);
-    setSelectedCompetence(null);
+    setSelectedCompetence(null); // Réinitialiser la compétence car les options changent
   };
 
   const handleTacheChange = (value) => {
     setSelectedTache(value || null);
-    setSelectedCompetence(null);
+    setSelectedCompetence(null); // Réinitialiser la compétence car les options changent selon la tâche
   };
 
   const handleCompetenceChange = (value) => {
     setSelectedCompetence(value || null);
   };
 
-  const styles = {
-    container: {
+  return (
+    <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+      fontFamily: "'Instrument Sans', 'SF Pro Display', -apple-system, sans-serif",
       color: '#e2e8f0',
-      fontFamily: "'Instrument Sans', sans-serif",
-      padding: '40px 20px'
-    },
-    wrapper: {
-      maxWidth: '1400px',
-      margin: '0 auto'
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '40px',
-      position: 'relative',
-      padding: '32px'
-    },
-    glassCard: {
-      background: 'rgba(30, 41, 59, 0.7)',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(148, 163, 184, 0.1)',
-      borderRadius: '24px',
-      marginBottom: '24px'
-    },
-    tag: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      padding: '6px 12px',
-      borderRadius: '20px',
-      fontSize: '12px',
-      fontWeight: 600,
-      fontFamily: "'JetBrains Mono', monospace",
-      letterSpacing: '0.5px'
-    },
-    select: {
-      width: '100%',
-      padding: '14px 16px',
-      background: 'rgba(15, 23, 42, 0.8)',
-      border: '2px solid rgba(148, 163, 184, 0.2)',
-      borderRadius: '12px',
-      color: '#e2e8f0',
-      fontSize: '14px',
-      fontFamily: 'inherit',
-      cursor: 'pointer'
-    },
-    btnMode: {
-      padding: '10px 20px',
-      border: '2px solid transparent',
-      borderRadius: '10px',
-      fontSize: '13px',
-      fontWeight: 600,
-      cursor: 'pointer',
-      background: 'rgba(30, 41, 59, 0.6)',
-      color: '#94a3b8',
-      marginRight: '8px',
-      marginBottom: '8px'
-    },
-    btnModeActive: {
-      background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-      color: '#0f172a',
-      borderColor: '#fbbf24'
-    },
-    btnReset: {
-      padding: '12px 24px',
-      background: 'transparent',
-      border: '2px solid rgba(239, 68, 68, 0.5)',
-      borderRadius: '10px',
-      color: '#ef4444',
-      fontSize: '13px',
-      fontWeight: 600,
-      cursor: 'pointer'
-    },
-    btnSeance: {
-      width: '100%',
-      padding: '16px 24px',
-      background: 'linear-gradient(135deg, #10b981, #059669)',
-      border: 'none',
-      borderRadius: '12px',
-      color: '#fff',
-      fontSize: '15px',
-      fontWeight: 600,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '10px',
-      boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)'
-    }
-  };
+      padding: '2rem'
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        * { box-sizing: border-box; }
+        
+        .glass-card {
+          background: rgba(30, 41, 59, 0.6);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(148, 163, 184, 0.1);
+          border-radius: 20px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+          border-color: rgba(251, 191, 36, 0.3);
+          box-shadow: 0 0 40px rgba(251, 191, 36, 0.1);
+        }
+        
+        .select-wrapper {
+          position: relative;
+        }
+        
+        .select-wrapper::after {
+          content: '▼';
+          position: absolute;
+          right: 16px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #fbbf24;
+          font-size: 10px;
+          pointer-events: none;
+        }
+        
+        select {
+          appearance: none;
+          width: 100%;
+          padding: 14px 40px 14px 16px;
+          background: rgba(15, 23, 42, 0.8);
+          border: 2px solid rgba(148, 163, 184, 0.2);
+          border-radius: 12px;
+          color: #e2e8f0;
+          font-size: 14px;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        select:hover {
+          border-color: rgba(251, 191, 36, 0.5);
+        }
+        
+        select:focus {
+          outline: none;
+          border-color: #fbbf24;
+          box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+        }
+        
+        select option {
+          background: #1e293b;
+          color: #e2e8f0;
+          padding: 12px;
+        }
+        
+        .tag {
+          display: inline-flex;
+          align-items: center;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          font-family: 'JetBrains Mono', monospace;
+          letter-spacing: 0.5px;
+        }
+        
+        .niveau-1 { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .niveau-2 { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .niveau-3 { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .niveau-4 { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        
+        .btn-mode {
+          padding: 10px 20px;
+          border: 2px solid transparent;
+          border-radius: 10px;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: rgba(30, 41, 59, 0.6);
+          color: #94a3b8;
+        }
+        
+        .btn-mode:hover {
+          background: rgba(30, 41, 59, 0.9);
+          color: #e2e8f0;
+        }
+        
+        .btn-mode.active {
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          color: #0f172a;
+          border-color: #fbbf24;
+        }
+        
+        .btn-reset {
+          padding: 12px 24px;
+          background: transparent;
+          border: 2px solid rgba(239, 68, 68, 0.5);
+          border-radius: 10px;
+          color: #ef4444;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .btn-reset:hover {
+          background: rgba(239, 68, 68, 0.1);
+          border-color: #ef4444;
+        }
+        
+        .result-card {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(148, 163, 184, 0.1);
+          border-radius: 16px;
+          padding: 20px;
+          margin-bottom: 16px;
+          transition: all 0.2s ease;
+        }
+        
+        .result-card:hover {
+          transform: translateX(8px);
+          border-color: rgba(251, 191, 36, 0.3);
+        }
+        
+        .critere-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 12px 16px;
+          background: rgba(30, 41, 59, 0.4);
+          border-radius: 10px;
+          margin-bottom: 8px;
+          border-left: 3px solid #fbbf24;
+        }
+        
+        .critere-check {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        
+        .animate-in {
+          animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .header-decoration {
+          position: absolute;
+          top: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+          border-radius: 2px;
+        }
+        
+        .glow-text {
+          text-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
+        }
 
-  const getNiveauStyle = (niveau) => {
-    const colors = {
-      1: { background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', border: '1px solid rgba(34, 197, 94, 0.3)' },
-      2: { background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)' },
-      3: { background: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', border: '1px solid rgba(168, 85, 247, 0.3)' },
-      4: { background: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)' }
-    };
-    return { ...styles.tag, ...colors[niveau] };
-  };
+        .empty-state {
+          text-align: center;
+          padding: 60px 20px;
+          color: #64748b;
+        }
+        
+        .empty-state svg {
+          width: 80px;
+          height: 80px;
+          margin-bottom: 20px;
+          opacity: 0.5;
+        }
+      `}</style>
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.wrapper}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{...styles.glassCard, ...styles.header}}>
-          <div style={{
+        <div className="glass-card" style={{ 
+          padding: '40px', 
+          marginBottom: '24px',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div className="header-decoration" />
+          <div style={{ 
             position: 'absolute',
             top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '200px',
-            height: '4px',
-            background: 'linear-gradient(90deg, transparent, #fbbf24, transparent)',
-            borderRadius: '0 0 4px 4px'
+            right: 0,
+            width: '300px',
+            height: '300px',
+            background: 'radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 70%)',
+            pointerEvents: 'none'
           }} />
-          <h1 style={{
-            fontSize: '2.5rem',
-            fontWeight: 700,
-            background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+          
+          <h1 className="glow-text" style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 700, 
+            marginBottom: '12px',
+            background: 'linear-gradient(135deg, #fbbf24, #f59e0b, #fbbf24)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            marginBottom: '8px'
+            letterSpacing: '-0.5px'
           }}>
             Référentiel BTS Bâtiment
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>
-            Formulaire interactif d'exploration des compétences
+          <p style={{ 
+            color: '#94a3b8', 
+            fontSize: '1.1rem',
+            maxWidth: '600px'
+          }}>
+            Explorateur interactif du référentiel de compétences
+            <span style={{ 
+              display: 'inline-block',
+              marginLeft: '12px',
+              padding: '4px 10px',
+              background: 'rgba(251, 191, 36, 0.15)',
+              borderRadius: '6px',
+              fontSize: '12px',
+              color: '#fbbf24',
+              fontFamily: "'JetBrains Mono', monospace"
+            }}>
+              4 Blocs • 15 Compétences
+            </span>
           </p>
           <p style={{
             position: 'absolute',
@@ -865,7 +1065,8 @@ function FormulaireBTSEBCR() {
             right: '24px',
             fontSize: '11px',
             fontStyle: 'italic',
-            color: '#64748b'
+            color: '#64748b',
+            margin: 0
           }}>
             Jean-Philippe Amat — V1.2 — 2026
           </p>
@@ -880,34 +1081,34 @@ function FormulaireBTSEBCR() {
           flexWrap: 'wrap',
           gap: '16px'
         }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <button 
-              style={{...styles.btnMode, ...(viewMode === 'competences' ? styles.btnModeActive : {})}}
+              className={`btn-mode ${viewMode === 'competences' ? 'active' : ''}`}
               onClick={() => setViewMode('competences')}
             >
               ◇ Bloc de compétences
             </button>
             <button 
-              style={{...styles.btnMode, ...(viewMode === 'tableau' ? styles.btnModeActive : {})}}
+              className={`btn-mode ${viewMode === 'tableau' ? 'active' : ''}`}
               onClick={() => setViewMode('tableau')}
             >
               ▦ Tâches / Compétences
             </button>
             <button 
-              style={{...styles.btnMode, ...(viewMode === 'connaissances' ? styles.btnModeActive : {})}}
+              className={`btn-mode ${viewMode === 'connaissances' ? 'active' : ''}`}
               onClick={() => setViewMode('connaissances')}
             >
               ▤ Connaissances / Compétences
             </button>
           </div>
           
-          <button style={styles.btnReset} onClick={resetFilters}>
+          <button className="btn-reset" onClick={resetFilters}>
             ↺ Réinitialiser les filtres
           </button>
         </div>
 
         {/* Filters */}
-        <div style={{...styles.glassCard, padding: '32px'}}>
+        <div className="glass-card animate-in" style={{ padding: '32px', marginBottom: '24px' }}>
           <h2 style={{ 
             fontSize: '1rem', 
             fontWeight: 600, 
@@ -944,19 +1145,21 @@ function FormulaireBTSEBCR() {
               }}>
                 Bloc de compétences
               </label>
-              <select style={styles.select} value={selectedBloc || ''} onChange={(e) => handleBlocChange(e.target.value)}>
-                <option value="">Tous les blocs</option>
-                {data.blocs.map(bloc => (
-                  <option key={bloc.id} value={bloc.id}>
-                    Bloc {bloc.id} ({bloc.unite}) — {bloc.nom}
-                  </option>
-                ))}
-              </select>
+              <div className="select-wrapper">
+                <select value={selectedBloc || ''} onChange={(e) => handleBlocChange(e.target.value)}>
+                  <option value="">Tous les blocs</option>
+                  {data.blocs.map(bloc => (
+                    <option key={bloc.id} value={bloc.id}>
+                      Bloc {bloc.id} ({bloc.unite}) — {bloc.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Pole Filter */}
+            {/* Pole Filter - Conditional */}
             {selectedBloc && (
-              <div>
+              <div className="animate-in">
                 <label style={{ 
                   display: 'block', 
                   marginBottom: '8px', 
@@ -966,20 +1169,22 @@ function FormulaireBTSEBCR() {
                 }}>
                   Pôle d'activité
                 </label>
-                <select style={styles.select} value={selectedPole || ''} onChange={(e) => handlePoleChange(e.target.value)}>
-                  <option value="">Tous les pôles</option>
-                  {currentBloc?.poles.map(pole => (
-                    <option key={pole.id} value={pole.id}>
-                      {pole.id} — {pole.nom}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-wrapper">
+                  <select value={selectedPole || ''} onChange={(e) => handlePoleChange(e.target.value)}>
+                    <option value="">Tous les pôles</option>
+                    {currentBloc?.poles.map(pole => (
+                      <option key={pole.id} value={pole.id}>
+                        {pole.id} — {pole.nom}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
 
-            {/* Tache Filter */}
+            {/* Tache Filter - Conditional */}
             {selectedPole && (
-              <div>
+              <div className="animate-in">
                 <label style={{ 
                   display: 'block', 
                   marginBottom: '8px', 
@@ -989,20 +1194,22 @@ function FormulaireBTSEBCR() {
                 }}>
                   Tâche professionnelle
                 </label>
-                <select style={styles.select} value={selectedTache || ''} onChange={(e) => handleTacheChange(e.target.value)}>
-                  <option value="">Toutes les tâches</option>
-                  {currentPole?.taches.map(tache => (
-                    <option key={tache.id} value={tache.id}>
-                      {tache.id} — {tache.nom}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-wrapper">
+                  <select value={selectedTache || ''} onChange={(e) => handleTacheChange(e.target.value)}>
+                    <option value="">Toutes les tâches</option>
+                    {currentPole?.taches.map(tache => (
+                      <option key={tache.id} value={tache.id}>
+                        {tache.id} — {tache.nom}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
 
-            {/* Competence Filter */}
+            {/* Competence Filter - Conditional based on task selection */}
             {selectedBloc && (
-              <div>
+              <div className="animate-in">
                 <label style={{ 
                   display: 'block', 
                   marginBottom: '8px', 
@@ -1022,14 +1229,16 @@ function FormulaireBTSEBCR() {
                     </span>
                   )}
                 </label>
-                <select style={styles.select} value={selectedCompetence || ''} onChange={(e) => handleCompetenceChange(e.target.value)}>
-                  <option value="">{selectedTache ? `Compétences de ${selectedTache}` : 'Toutes les compétences'}</option>
-                  {availableCompetences.map(comp => (
-                    <option key={comp.id} value={comp.id}>
-                      {comp.id} — {comp.nom}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-wrapper">
+                  <select value={selectedCompetence || ''} onChange={(e) => handleCompetenceChange(e.target.value)}>
+                    <option value="">{selectedTache ? `Compétences de ${selectedTache}` : 'Toutes les compétences'}</option>
+                    {availableCompetences.map(comp => (
+                      <option key={comp.id} value={comp.id}>
+                        {comp.id} — {comp.nom}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
           </div>
@@ -1039,7 +1248,25 @@ function FormulaireBTSEBCR() {
             <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(148, 163, 184, 0.2)' }}>
               <button
                 onClick={() => setShowSeanceModal(true)}
-                style={styles.btnSeance}
+                style={{
+                  width: '100%',
+                  padding: '16px 24px',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: '#fff',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)'
+                }}
+                onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+                onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
               >
                 <span style={{ fontSize: '20px' }}>📋</span>
                 Aide à la création de séance
@@ -1065,8 +1292,8 @@ function FormulaireBTSEBCR() {
             padding: '20px'
           }} onClick={() => setShowSeanceModal(false)}>
             <div 
+              className="glass-card animate-in"
               style={{
-                ...styles.glassCard,
                 maxWidth: '900px',
                 maxHeight: '90vh',
                 overflow: 'auto',
@@ -1124,16 +1351,16 @@ function FormulaireBTSEBCR() {
                 </h3>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {currentBloc && (
-                    <span style={getNiveauStyle(4)}>Bloc {currentBloc.id} - {currentBloc.nom}</span>
+                    <span className="tag niveau-4">Bloc {currentBloc.id} - {currentBloc.nom}</span>
                   )}
                   {currentPole && (
-                    <span style={getNiveauStyle(3)}>{currentPole.id} - {currentPole.nom}</span>
+                    <span className="tag niveau-3">{currentPole.id} - {currentPole.nom}</span>
                   )}
                   {currentTache && (
-                    <span style={getNiveauStyle(2)}>{currentTache.id}</span>
+                    <span className="tag niveau-2">{currentTache.id}</span>
                   )}
                   {currentCompetence && (
-                    <span style={getNiveauStyle(1)}>{currentCompetence.id}</span>
+                    <span className="tag niveau-1">{currentCompetence.id}</span>
                   )}
                 </div>
               </div>
@@ -1215,6 +1442,7 @@ function FormulaireBTSEBCR() {
                     borderRadius: '12px',
                     padding: '16px'
                   }}>
+                    {/* Si une tâche est sélectionnée, afficher seulement ses résultats */}
                     {selectedTache && currentPole.resultatsAttendus[selectedTache] ? (
                       <div>
                         <div style={{
@@ -1261,6 +1489,7 @@ function FormulaireBTSEBCR() {
                         ))}
                       </div>
                     ) : (
+                      /* Sinon afficher tous les résultats groupés par tâche */
                       Object.entries(currentPole.resultatsAttendus).map(([tacheId, resultats]) => (
                         <div key={tacheId} style={{ marginBottom: '16px' }}>
                           <div style={{
@@ -1353,6 +1582,7 @@ function FormulaireBTSEBCR() {
                         <span style={{ color: '#e2e8f0', fontWeight: 500 }}>{comp.nom}</span>
                       </div>
 
+                      {/* Connaissances associées */}
                       <div style={{ marginBottom: '12px' }}>
                         <span style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           Connaissances associées :
@@ -1370,7 +1600,7 @@ function FormulaireBTSEBCR() {
                               gap: '6px'
                             }}>
                               {conn.nom}
-                              <span style={getNiveauStyle(conn.niveau)}>
+                              <span className={`tag niveau-${conn.niveau}`} style={{ padding: '2px 6px', fontSize: '10px' }}>
                                 N{conn.niveau}
                               </span>
                             </span>
@@ -1378,6 +1608,7 @@ function FormulaireBTSEBCR() {
                         </div>
                       </div>
 
+                      {/* Critères d'évaluation */}
                       <div>
                         <span style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           Critères d'évaluation :
@@ -1394,12 +1625,74 @@ function FormulaireBTSEBCR() {
                   ))}
                 </div>
               )}
+
+              {/* Connaissances globales liées */}
+              {availableCompetences.length > 0 && (
+                <div>
+                  <h3 style={{ 
+                    color: '#4ade80', 
+                    fontSize: '14px', 
+                    fontWeight: 600, 
+                    marginBottom: '16px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span>📚</span> Savoirs associés (connaissances globales)
+                  </h3>
+                  <div style={{
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    borderRadius: '12px',
+                    padding: '16px'
+                  }}>
+                    {connaissancesGlobales
+                      .filter(conn => availableCompetences.some(comp => conn.competences.includes(comp.id)))
+                      .map(conn => (
+                        <div key={conn.id} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          marginBottom: '10px',
+                          padding: '8px 12px',
+                          background: 'rgba(30, 41, 59, 0.4)',
+                          borderRadius: '8px'
+                        }}>
+                          <span style={{
+                            color: '#4ade80',
+                            fontFamily: "'JetBrains Mono', monospace",
+                            fontSize: '12px',
+                            fontWeight: 600
+                          }}>{conn.id}</span>
+                          <span style={{ color: '#e2e8f0', fontSize: '14px' }}>{conn.nom}</span>
+                          <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
+                            {availableCompetences
+                              .filter(comp => conn.competences.includes(comp.id))
+                              .map(comp => (
+                                <span key={comp.id} style={{
+                                  background: 'rgba(251, 191, 36, 0.3)',
+                                  color: '#fbbf24',
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  fontSize: '10px',
+                                  fontWeight: 600
+                                }}>{comp.id}</span>
+                              ))
+                            }
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
 
         {/* Results */}
-        <div style={{...styles.glassCard, padding: '32px'}}>
+        <div className="glass-card" style={{ padding: '32px' }}>
           <h2 style={{ 
             fontSize: '1rem', 
             fontWeight: 600, 
@@ -1420,269 +1713,9 @@ function FormulaireBTSEBCR() {
             Résultats
           </h2>
 
-          {viewMode === 'competences' && (
-            <div>
-              {!selectedBloc ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-                  {data.blocs.map(bloc => (
-                    <div 
-                      key={bloc.id} 
-                      onClick={() => handleBlocChange(bloc.id.toString())}
-                      style={{ 
-                        background: 'rgba(15, 23, 42, 0.6)',
-                        border: '1px solid rgba(148, 163, 184, 0.1)',
-                        borderRadius: '16px',
-                        padding: '20px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '12px',
-                        marginBottom: '12px'
-                      }}>
-                        <span style={getNiveauStyle(4)}>{bloc.unite}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: '#64748b',
-                          fontFamily: "'JetBrains Mono', monospace"
-                        }}>
-                          Bloc {bloc.id}
-                        </span>
-                      </div>
-                      <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '12px' }}>
-                        {bloc.nom}
-                      </h3>
-                      <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#64748b' }}>
-                        <span>{bloc.poles.length} pôles</span>
-                        <span>{bloc.competences.length} compétences</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div>
-                  {(selectedCompetence ? [currentCompetence] : availableCompetences).filter(Boolean).map(comp => (
-                    <div key={comp.id} style={{
-                      background: 'rgba(15, 23, 42, 0.6)',
-                      border: '1px solid rgba(148, 163, 184, 0.1)',
-                      borderRadius: '16px',
-                      padding: '20px',
-                      marginBottom: '16px'
-                    }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '12px',
-                        marginBottom: '16px'
-                      }}>
-                        <span style={{
-                          background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                          color: '#0f172a',
-                          padding: '6px 12px',
-                          borderRadius: '8px',
-                          fontWeight: 700,
-                          fontSize: '14px',
-                          fontFamily: "'JetBrains Mono', monospace"
-                        }}>{comp.id}</span>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
-                          {comp.nom}
-                        </h3>
-                      </div>
-
-                      <div style={{ marginBottom: '16px' }}>
-                        <h4 style={{ 
-                          fontSize: '13px', 
-                          color: '#94a3b8', 
-                          marginBottom: '12px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}>
-                          Connaissances associées
-                        </h4>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                          {comp.connaissances.map((conn, idx) => (
-                            <span key={idx} style={{
-                              background: 'rgba(30, 41, 59, 0.6)',
-                              padding: '8px 12px',
-                              borderRadius: '8px',
-                              fontSize: '13px',
-                              color: '#e2e8f0',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px'
-                            }}>
-                              {conn.nom}
-                              <span style={getNiveauStyle(conn.niveau)}>
-                                N{conn.niveau}
-                              </span>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 style={{ 
-                          fontSize: '13px', 
-                          color: '#94a3b8', 
-                          marginBottom: '12px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}>
-                          Critères d'évaluation
-                        </h4>
-                        {comp.criteres.map((critere, idx) => (
-                          <div key={idx} style={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '12px',
-                            padding: '12px 16px',
-                            background: 'rgba(30, 41, 59, 0.4)',
-                            borderRadius: '10px',
-                            marginBottom: '8px',
-                            borderLeft: '3px solid #fbbf24'
-                          }}>
-                            <span style={{
-                              width: '20px',
-                              height: '20px',
-                              borderRadius: '50%',
-                              background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '10px',
-                              color: '#0f172a',
-                              flexShrink: 0
-                            }}>✓</span>
-                            <span style={{ color: '#e2e8f0', fontSize: '14px' }}>{critere}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {viewMode === 'tableau' && (
-            <div style={{ overflowX: 'auto' }}>
-              <p style={{ color: '#94a3b8', marginBottom: '16px', fontSize: '14px' }}>
-                Tableau croisé des tâches professionnelles et des compétences mobilisées
-              </p>
-              <table style={{ 
-                width: '100%', 
-                borderCollapse: 'collapse',
-                fontSize: '12px'
-              }}>
-                <thead>
-                  <tr>
-                    <th style={{ 
-                      background: 'rgba(30, 41, 59, 0.8)',
-                      padding: '12px 8px',
-                      textAlign: 'left',
-                      borderBottom: '2px solid #fbbf24',
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 2,
-                      minWidth: '300px'
-                    }}>
-                      Tâches professionnelles
-                    </th>
-                    {data.blocs.flatMap(bloc => 
-                      bloc.competences.map(comp => (
-                        <th 
-                          key={comp.id}
-                          style={{ 
-                            background: 'rgba(30, 41, 59, 0.6)',
-                            padding: '8px 4px',
-                            textAlign: 'center',
-                            borderBottom: '2px solid #fbbf24',
-                            minWidth: '45px'
-                          }}
-                          title={comp.nom}
-                        >
-                          <span style={{ 
-                            color: '#fbbf24', 
-                            fontWeight: 700,
-                            fontSize: '11px'
-                          }}>
-                            {comp.id}
-                          </span>
-                        </th>
-                      ))
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.blocs.flatMap(bloc => 
-                    bloc.poles.flatMap(pole => 
-                      pole.taches.map(tache => (
-                        <tr key={tache.id}>
-                          <td style={{ 
-                            background: 'rgba(15, 23, 42, 0.6)',
-                            padding: '10px 12px',
-                            borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
-                            position: 'sticky',
-                            left: 0,
-                            zIndex: 1
-                          }}>
-                            <span style={{ 
-                              color: '#c084fc',
-                              fontFamily: "'JetBrains Mono', monospace",
-                              fontSize: '11px',
-                              marginRight: '10px',
-                              fontWeight: 600
-                            }}>
-                              {tache.id}
-                            </span>
-                            <span style={{ color: '#e2e8f0', fontSize: '12px' }}>{tache.nom}</span>
-                          </td>
-                          {data.blocs.flatMap(b => 
-                            b.competences.map(comp => (
-                              <td 
-                                key={`${tache.id}-${comp.id}`}
-                                style={{ 
-                                  background: 'rgba(15, 23, 42, 0.4)',
-                                  padding: '8px',
-                                  textAlign: 'center',
-                                  borderBottom: '1px solid rgba(148, 163, 184, 0.1)'
-                                }}
-                              >
-                                {tache.competences?.includes(comp.id) && (
-                                  <span style={{ 
-                                    display: 'inline-block',
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '4px',
-                                    background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                                    color: '#0f172a',
-                                    fontWeight: 700,
-                                    fontSize: '12px',
-                                    lineHeight: '20px'
-                                  }}>
-                                    ✕
-                                  </span>
-                                )}
-                              </td>
-                            ))
-                          )}
-                        </tr>
-                      ))
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {viewMode === 'connaissances' && (
-            <div style={{ overflowX: 'auto' }}>
-              <p style={{ color: '#94a3b8', marginBottom: '16px', fontSize: '14px' }}>
-                Tableau croisé des savoirs associés et des compétences
-              </p>
+          {viewMode === 'connaissances' ? (
+            /* Tableau Croisé Connaissances-Compétences */
+            <div className="animate-in" style={{ overflowX: 'auto' }}>
               <table style={{ 
                 width: '100%', 
                 borderCollapse: 'collapse',
@@ -1702,15 +1735,41 @@ function FormulaireBTSEBCR() {
                     }}>
                       Connaissances
                     </th>
+                    {data.blocs.map(bloc => (
+                      <th 
+                        key={bloc.id} 
+                        colSpan={bloc.competences.length}
+                        style={{ 
+                          background: 'rgba(251, 191, 36, 0.2)',
+                          padding: '8px',
+                          textAlign: 'center',
+                          borderBottom: '2px solid #fbbf24',
+                          borderLeft: '2px solid rgba(148, 163, 184, 0.3)'
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, marginBottom: '4px', fontSize: '11px' }}>{bloc.id} - {bloc.nom}</div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th style={{ 
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      padding: '8px',
+                      borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2
+                    }}></th>
                     {data.blocs.flatMap(bloc => 
-                      bloc.competences.map(comp => (
+                      bloc.competences.map((comp, idx) => (
                         <th 
                           key={comp.id}
                           style={{ 
                             background: 'rgba(30, 41, 59, 0.6)',
                             padding: '8px 4px',
                             textAlign: 'center',
-                            borderBottom: '2px solid #fbbf24',
+                            borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)',
                             minWidth: '45px'
                           }}
                           title={comp.nom}
@@ -1750,27 +1809,28 @@ function FormulaireBTSEBCR() {
                         <span style={{ color: '#e2e8f0', fontSize: '13px' }}>{conn.nom}</span>
                       </td>
                       {data.blocs.flatMap(bloc => 
-                        bloc.competences.map(comp => (
+                        bloc.competences.map((comp, idx) => (
                           <td 
                             key={`${conn.id}-${comp.id}`}
                             style={{ 
                               background: 'rgba(15, 23, 42, 0.4)',
                               padding: '8px',
                               textAlign: 'center',
-                              borderBottom: '1px solid rgba(148, 163, 184, 0.1)'
+                              borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                              borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)'
                             }}
                           >
                             {conn.competences.includes(comp.id) && (
                               <span style={{ 
                                 display: 'inline-block',
-                                width: '20px',
-                                height: '20px',
-                                borderRadius: '4px',
+                                width: '18px',
+                                height: '18px',
                                 background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-                                color: '#0f172a',
+                                borderRadius: '4px',
+                                color: '#fff',
                                 fontWeight: 700,
-                                fontSize: '12px',
-                                lineHeight: '20px'
+                                fontSize: '11px',
+                                lineHeight: '18px'
                               }}>
                                 ✕
                               </span>
@@ -1783,29 +1843,305 @@ function FormulaireBTSEBCR() {
                 </tbody>
               </table>
             </div>
+          ) : viewMode === 'tableau' ? (
+            /* Tableau Croisé View */
+            <div className="animate-in" style={{ overflowX: 'auto' }}>
+              <table style={{ 
+                width: '100%', 
+                borderCollapse: 'collapse',
+                fontSize: '12px'
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{ 
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      padding: '12px 8px',
+                      textAlign: 'left',
+                      borderBottom: '2px solid #fbbf24',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2,
+                      minWidth: '200px'
+                    }}>
+                      Activités / Tâches
+                    </th>
+                    {data.blocs.map(bloc => (
+                      <th 
+                        key={bloc.id} 
+                        colSpan={bloc.competences.length}
+                        style={{ 
+                          background: 'rgba(251, 191, 36, 0.2)',
+                          padding: '8px',
+                          textAlign: 'center',
+                          borderBottom: '2px solid #fbbf24',
+                          borderLeft: '2px solid rgba(148, 163, 184, 0.3)'
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{bloc.id} - {bloc.nom}</div>
+                        <div style={{ fontSize: '10px', color: '#94a3b8' }}>{bloc.unite}</div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th style={{ 
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      padding: '8px',
+                      borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2
+                    }}></th>
+                    {data.blocs.flatMap(bloc => 
+                      bloc.competences.map((comp, idx) => (
+                        <th 
+                          key={comp.id}
+                          style={{ 
+                            background: 'rgba(30, 41, 59, 0.6)',
+                            padding: '8px 4px',
+                            textAlign: 'center',
+                            borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)',
+                            minWidth: '50px',
+                            writingMode: 'vertical-rl',
+                            textOrientation: 'mixed',
+                            height: '120px',
+                            fontSize: '10px',
+                            color: '#94a3b8'
+                          }}
+                          title={comp.nom}
+                        >
+                          <div style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}>
+                            <span style={{ 
+                              color: '#fbbf24', 
+                              fontWeight: 700,
+                              writingMode: 'horizontal-tb'
+                            }}>
+                              {comp.id}
+                            </span>
+                            <span style={{ 
+                              maxHeight: '100px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis'
+                            }}>
+                              {comp.nom.length > 40 ? comp.nom.substring(0, 40) + '...' : comp.nom}
+                            </span>
+                          </div>
+                        </th>
+                      ))
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.blocs.map(bloc => (
+                    <React.Fragment key={bloc.id}>
+                      {bloc.poles.map((pole, poleIdx) => (
+                        <React.Fragment key={pole.id}>
+                          {/* Pole header row */}
+                          <tr>
+                            <td 
+                              colSpan={1 + data.blocs.reduce((sum, b) => sum + b.competences.length, 0)}
+                              style={{ 
+                                background: 'rgba(251, 191, 36, 0.1)',
+                                padding: '10px 12px',
+                                fontWeight: 600,
+                                color: '#fbbf24',
+                                borderTop: poleIdx === 0 ? '2px solid rgba(251, 191, 36, 0.5)' : 'none'
+                              }}
+                            >
+                              <span style={{ fontFamily: "'JetBrains Mono', monospace", marginRight: '8px' }}>
+                                {pole.id}
+                              </span>
+                              {pole.nom}
+                            </td>
+                          </tr>
+                          {/* Taches rows */}
+                          {pole.taches.map(tache => (
+                            <tr key={tache.id}>
+                              <td style={{ 
+                                background: 'rgba(15, 23, 42, 0.6)',
+                                padding: '8px 12px',
+                                borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                                position: 'sticky',
+                                left: 0,
+                                zIndex: 1
+                              }}>
+                                <span style={{ 
+                                  color: '#c084fc',
+                                  fontFamily: "'JetBrains Mono', monospace",
+                                  fontSize: '11px',
+                                  marginRight: '8px'
+                                }}>
+                                  {tache.id}
+                                </span>
+                                <span style={{ color: '#e2e8f0' }}>{tache.nom}</span>
+                              </td>
+                              {data.blocs.flatMap(b => 
+                                b.competences.map((comp, idx) => (
+                                  <td 
+                                    key={`${tache.id}-${comp.id}`}
+                                    style={{ 
+                                      background: 'rgba(15, 23, 42, 0.4)',
+                                      padding: '8px',
+                                      textAlign: 'center',
+                                      borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                                      borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)'
+                                    }}
+                                  >
+                                    {tache.competences?.includes(comp.id) && (
+                                      <span style={{ 
+                                        display: 'inline-block',
+                                        width: '20px',
+                                        height: '20px',
+                                        background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+                                        borderRadius: '4px',
+                                        color: '#0f172a',
+                                        fontWeight: 700,
+                                        fontSize: '12px',
+                                        lineHeight: '20px'
+                                      }}>
+                                        ✕
+                                      </span>
+                                    )}
+                                  </td>
+                                ))
+                              )}
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            /* Competences View */
+            <div>
+              {!selectedBloc ? (
+                <div className="empty-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                  </svg>
+                  <p style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Sélectionnez un bloc</p>
+                  <p style={{ fontSize: '14px' }}>pour afficher les compétences associées</p>
+                </div>
+              ) : (
+                <div>
+                  {(selectedCompetence ? currentBloc?.competences.filter(c => c.id === selectedCompetence) : currentBloc?.competences)?.map(comp => (
+                    <div key={comp.id} className="result-card animate-in">
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '12px',
+                        marginBottom: '16px'
+                      }}>
+                        <span style={{ 
+                          background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+                          color: '#0f172a',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          fontWeight: 700,
+                          fontFamily: "'JetBrains Mono', monospace"
+                        }}>
+                          {comp.id}
+                        </span>
+                        <h4 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
+                          {comp.nom}
+                        </h4>
+                      </div>
+
+                      {/* Connaissances */}
+                      <div style={{ marginBottom: '20px' }}>
+                        <h5 style={{ 
+                          fontSize: '12px', 
+                          color: '#94a3b8', 
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px',
+                          marginBottom: '12px'
+                        }}>
+                          Connaissances associées
+                        </h5>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          {comp.connaissances.map((conn, i) => (
+                            <div key={i} style={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: '8px',
+                              background: 'rgba(30, 41, 59, 0.6)',
+                              padding: '8px 12px',
+                              borderRadius: '8px'
+                            }}>
+                              <span style={{ fontSize: '13px', color: '#e2e8f0' }}>{conn.nom}</span>
+                              <span className={`tag niveau-${conn.niveau}`} style={{ padding: '2px 8px', fontSize: '10px' }}>
+                                N{conn.niveau}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Critères */}
+                      <div>
+                        <h5 style={{ 
+                          fontSize: '12px', 
+                          color: '#94a3b8', 
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px',
+                          marginBottom: '12px'
+                        }}>
+                          Critères d'évaluation
+                        </h5>
+                        {comp.criteres.map((critere, i) => (
+                          <div key={i} className="critere-item">
+                            <div className="critere-check">
+                              <span style={{ color: '#0f172a', fontSize: '12px' }}>✓</span>
+                            </div>
+                            <span style={{ fontSize: '14px', color: '#e2e8f0' }}>{critere}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '24px',
-          color: '#64748b',
-          fontSize: '12px'
+        {/* Legend */}
+        <div className="glass-card" style={{ 
+          padding: '20px 32px', 
+          marginTop: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '24px',
+          flexWrap: 'wrap'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '12px' }}>
-            <span><span style={getNiveauStyle(1)}>N1</span> {niveauLabels[1]}</span>
-            <span><span style={getNiveauStyle(2)}>N2</span> {niveauLabels[2]}</span>
-            <span><span style={getNiveauStyle(3)}>N3</span> {niveauLabels[3]}</span>
-            <span><span style={getNiveauStyle(4)}>N4</span> {niveauLabels[4]}</span>
-          </div>
+          <span style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            Niveaux taxonomiques :
+          </span>
+          {Object.entries(niveauLabels).map(([niveau, label]) => (
+            <div key={niveau} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className={`tag niveau-${niveau}`} style={{ padding: '4px 8px', fontSize: '11px' }}>
+                N{niveau}
+              </span>
+              <span style={{ fontSize: '12px', color: '#94a3b8' }}>{label}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<FormulaireBTSEBCR />);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FormulaireBTSEBCR />);
     </script>
 </body>
 </html>
