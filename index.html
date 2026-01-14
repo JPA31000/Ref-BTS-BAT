@@ -27,6 +27,68 @@
 const { useState, useMemo } = React;
 
 
+// Liste des ressources documentaires selon le référentiel BTS Bâtiment
+const ressourcesDocumentaires = {
+  "0. Identification du projet": [
+    "Nom du projet",
+    "Nom MOA",
+    "Nom MOE",
+    "Architecte",
+    "Bureau d'étude structure",
+    "Bureau de contrôle",
+    "SPS",
+    "Acousticien",
+    "Bureau d'étude thermique"
+  ],
+  "1. Documents du dossier marché (DCE)": {
+    "Pièces Écrites": [
+      "CCTP",
+      "CCAP",
+      "CCAG",
+      "RICT",
+      "PGC",
+      "Rapports d'études de sols"
+    ],
+    "Pièces Graphiques": [
+      "Plan PRO ARC",
+      "Plan PRO ST",
+      "Plan PRO CVC",
+      "Plans de prévention",
+      "Plans de circulation"
+    ],
+    "Pièces Temporelles": [
+      "Planning prévisionnel"
+    ]
+  },
+  "2. Documents d'exécution et techniques": [
+    "Dossier d'exécution",
+    "Plans de coffrage",
+    "Plans de ferraillage",
+    "Plans de pose",
+    "Croquis et schémas techniques",
+    "Notes de calculs",
+    "Fiches techniques",
+    "Maquette numérique (BIM)"
+  ],
+  "3. Documents de gestion, organisation et suivi": [
+    "Planning d'exécution détaillé",
+    "PIC",
+    "Budget prévisionnel",
+    "Budget travaux",
+    "Modes opératoires",
+    "Comptes rendus de réunions de chantier",
+    "Situations de travaux"
+  ],
+  "4. Documents administratifs et réglementaires": [
+    "DICT",
+    "Autorisations administratives",
+    "Normes",
+    "DTU",
+    "Réglementations",
+    "Certifications"
+  ]
+};
+
 const connaissancesGlobales = [
   { id: 1, nom: "Projet de construction et cadre réglementaire", competences: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15"] },
   { id: 2, nom: "Construction durable", competences: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15"] },
@@ -728,6 +790,17 @@ function FormulaireBTSEBCR() {
   const [selectedCompetence, setSelectedCompetence] = useState(null);
   const [viewMode, setViewMode] = useState('competences');
   const [showSeanceModal, setShowSeanceModal] = useState(false);
+  
+  // États pour le mode édition de séance
+  const [editMode, setEditMode] = useState(false);
+  const [seanceNumero, setSeanceNumero] = useState('');
+  const [seanceTitre, setSeanceTitre] = useState('');
+  const [onDonne, setOnDonne] = useState({});
+  const [onDonneDetails, setOnDonneDetails] = useState({});
+  const [onDemande, setOnDemande] = useState('');
+  const [customFields, setCustomFields] = useState({}); // Champs personnalisés par catégorie
+  const [expandedCategories, setExpandedCategories] = useState({}); // Catégories dépliées
+  const [selectedSavoirs, setSelectedSavoirs] = useState({}); // Savoirs associés sélectionnés
 
   const currentBloc = useMemo(() => 
     data.blocs.find(b => b.id === selectedBloc), 
@@ -800,6 +873,558 @@ function FormulaireBTSEBCR() {
 
   const handleCompetenceChange = (value) => {
     setSelectedCompetence(value || null);
+  };
+
+  // Fonction pour générer et exporter le PDF en format paysage
+  const exportToPDF = () => {
+    const printWindow = window.open('', '_blank');
+    
+    // Organiser les documents cochés par catégorie
+    const documentsParCategorie = {};
+    Object.entries(onDonne)
+      .filter(([_, checked]) => checked)
+      .forEach(([key, _]) => {
+        const parts = key.split('::');
+        const category = parts[0];
+        const isCustom = parts[1] === 'custom';
+        
+        if (!documentsParCategorie[category]) {
+          documentsParCategorie[category] = [];
+        }
+        
+        if (isCustom) {
+          const fieldId = parseInt(parts[2]);
+          const customField = (customFields[category] || []).find(f => f.id === fieldId);
+          if (customField && customField.nom) {
+            documentsParCategorie[category].push({
+              nom: customField.nom + ' (personnalisé)',
+              detail: customField.detail || ''
+            });
+          }
+        } else {
+          const itemName = parts.slice(1).join(' > ');
+          documentsParCategorie[category].push({
+            nom: itemName,
+            detail: onDonneDetails[key] || ''
+          });
+        }
+      });
+
+    // Récupérer les savoirs sélectionnés
+    const savoirsSelectionnes = connaissancesGlobales.filter(c => selectedSavoirs[c.id]);
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche de Séance${seanceNumero ? ' N°' + seanceNumero : ''} - BTS Bâtiment</title>
+    <style>
+        @page { 
+            size: A4 landscape; 
+            margin: 5mm;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            font-size: 7pt;
+            line-height: 1.2;
+            color: #1e293b;
+            width: 287mm;
+            height: 190mm;
+            overflow: hidden;
+        }
+        .page-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .header { 
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 4px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .header h1 { 
+            font-size: 11pt;
+            font-weight: 700;
+        }
+        .header-right {
+            text-align: right;
+            font-size: 7pt;
+        }
+        .header-right .seance-num {
+            font-size: 9pt;
+            font-weight: 700;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .main-content {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            padding: 5px 0;
+            min-height: 0;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .column-left {
+            background: #f8fafc;
+            border: 1px solid #3b82f6;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .column-right {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .column-title {
+            font-size: 8pt;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 3px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .column-left .column-title {
+            background: #3b82f6;
+            color: white;
+        }
+        .column-right .column-title {
+            background: #64748b;
+            color: white;
+        }
+        .section {
+            margin-bottom: 3px;
+            flex-shrink: 0;
+        }
+        .section.flex-1 {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .section-title {
+            font-size: 6.5pt;
+            font-weight: 700;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 2px;
+            margin-bottom: 2px;
+        }
+        .section-title.blue { background: #2563eb; }
+        .section-title.green { background: #16a34a; }
+        .section-title.purple { background: #7c3aed; }
+        .section-title.orange { background: #ea580c; }
+        .section-title.red { background: #dc2626; }
+        .section-title.gray { background: #64748b; }
+        .section-content {
+            font-size: 6.5pt;
+            padding: 3px 5px;
+            background: white;
+            border-radius: 2px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .section-content.scrollable {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0px 4px;
+            border-radius: 2px;
+            font-size: 6pt;
+            font-weight: 600;
+            margin-right: 3px;
+        }
+        .badge-bloc { background: #dbeafe; color: #1e40af; }
+        .badge-pole { background: #dcfce7; color: #166534; }
+        .badge-tache { background: #f3e8ff; color: #7c3aed; }
+        .badge-comp { background: #fef3c7; color: #b45309; }
+        .info-row {
+            margin-bottom: 1px;
+            padding: 1px 0;
+            font-size: 6.5pt;
+        }
+        .list-compact {
+            margin: 0;
+            padding-left: 12px;
+        }
+        .list-compact li {
+            margin-bottom: 1px;
+            font-size: 6.5pt;
+        }
+        .competence-mini {
+            background: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 2px;
+            margin-bottom: 2px;
+            border-left: 2px solid #3b82f6;
+        }
+        .competence-mini-title {
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 6.5pt;
+        }
+        .criteres-list {
+            font-size: 6pt;
+            color: #475569;
+            margin-top: 1px;
+        }
+        .on-donne-category {
+            margin-bottom: 3px;
+        }
+        .on-donne-category-title {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 1px 4px;
+            font-weight: 600;
+            font-size: 6pt;
+            border-radius: 1px;
+            margin-bottom: 1px;
+        }
+        .on-donne-item {
+            padding: 1px 4px;
+            background: #f8fafc;
+            margin-bottom: 1px;
+            border-left: 2px solid #94a3b8;
+            font-size: 6.5pt;
+        }
+        .on-donne-detail {
+            color: #64748b;
+            font-style: italic;
+            font-size: 6pt;
+        }
+        .on-demande-box {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            padding: 4px;
+            white-space: pre-wrap;
+            font-size: 7pt;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .seance-header {
+            background: #475569;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .seance-header .numero {
+            font-size: 9pt;
+            font-weight: 700;
+        }
+        .seance-header .titre {
+            font-size: 7pt;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+        .savoir-item {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 6pt;
+            margin: 1px;
+        }
+        .footer {
+            font-size: 6pt;
+            color: #94a3b8;
+            text-align: center;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+        @media print {
+            body { 
+                width: 287mm;
+                height: 190mm;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <div>
+                <h1>📋 FICHE DE SÉANCE - BTS BÂTIMENT</h1>
+            </div>
+            <div class="header-right">
+                ${seanceNumero ? `<span class="seance-num">Séance N° ${seanceNumero}</span>` : ''}
+                <div style="margin-top: 2px; font-size: 6pt;">${new Date().toLocaleDateString('fr-FR')}</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- COLONNE GAUCHE : RÉFÉRENTIEL -->
+            <div class="column column-left">
+                <div class="column-title">📚 RÉFÉRENTIEL BTS BÂTIMENT</div>
+                
+                <!-- Bloc et Pôle -->
+                <div class="section">
+                    <div class="section-title blue">📍 Contexte</div>
+                    <div class="section-content">
+                        ${currentBloc ? `<div class="info-row"><span class="badge badge-bloc">${currentBloc.unite}</span> <b>Bloc ${currentBloc.id}</b> - ${currentBloc.nom}</div>` : ''}
+                        ${currentPole ? `<div class="info-row"><span class="badge badge-pole">${currentPole.id}</span> ${currentPole.nom}</div>` : ''}
+                        ${currentTache ? `<div class="info-row"><span class="badge badge-tache">${currentTache.id}</span> ${currentTache.nom}</div>` : ''}
+                    </div>
+                </div>
+
+                <!-- Moyens et ressources -->
+                ${currentPole?.conditionsExercice ? `
+                <div class="section">
+                    <div class="section-title green">🔧 Moyens / Ressources</div>
+                    <div class="section-content">
+                        <div style="font-size: 6pt;">${currentPole.conditionsExercice.moyens.slice(0, 5).join(' • ')}${currentPole.conditionsExercice.moyens.length > 5 ? ' •...' : ''}</div>
+                        <div style="margin-top: 2px; font-size: 6pt;"><b>Autonomie:</b> ${currentPole.conditionsExercice.autonomie}</div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Résultats attendus -->
+                ${currentPole?.resultatsAttendus ? `
+                <div class="section">
+                    <div class="section-title purple">🎯 Résultats attendus</div>
+                    <div class="section-content">
+                        ${selectedTache && currentPole.resultatsAttendus[selectedTache] ? `
+                            <ul class="list-compact">
+                                ${currentPole.resultatsAttendus[selectedTache].slice(0, 3).map(r => `<li>${r}</li>`).join('')}
+                            </ul>
+                        ` : Object.entries(currentPole.resultatsAttendus).slice(0, 2).map(([tacheId, resultats]) => `
+                            <div><b style="font-size: 6pt;">${tacheId}:</b> ${resultats.slice(0, 2).join('; ')}${resultats.length > 2 ? '...' : ''}</div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Compétences mobilisées -->
+                <div class="section">
+                    <div class="section-title orange">⚡ Compétences</div>
+                    <div class="section-content">
+                        ${availableCompetences.slice(0, 3).map(comp => `
+                            <div class="competence-mini">
+                                <div class="competence-mini-title">${comp.id} - ${comp.nom}</div>
+                                <div style="font-size: 6pt; color: #64748b;">${comp.connaissances.slice(0, 3).map(c => `${c.nom}(N${c.niveau})`).join(', ')}</div>
+                                <div class="criteres-list">${comp.criteres.slice(0, 2).join(' • ')}</div>
+                            </div>
+                        `).join('')}
+                        ${availableCompetences.length > 3 ? `<div style="font-size: 6pt; color: #94a3b8;">+ ${availableCompetences.length - 3} autres compétences...</div>` : ''}
+                    </div>
+                </div>
+
+                <!-- Savoirs associés -->
+                ${savoirsSelectionnes.length > 0 ? `
+                <div class="section">
+                    <div class="section-title red">📚 Savoirs</div>
+                    <div class="section-content">
+                        ${savoirsSelectionnes.map(s => `<span class="savoir-item">${s.id}. ${s.nom}</span>`).join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+
+            <!-- COLONNE DROITE : CONSTRUCTION DE LA SÉANCE -->
+            <div class="column column-right">
+                <div class="column-title">✏️ CONSTRUCTION DE LA SÉANCE</div>
+                
+                <!-- En-tête séance -->
+                <div class="seance-header">
+                    ${seanceNumero ? `<div class="numero">SÉANCE N° ${seanceNumero}</div>` : '<div class="numero">SÉANCE</div>'}
+                    ${seanceTitre ? `<div class="titre">${seanceTitre}</div>` : ''}
+                </div>
+
+                <!-- ON DONNE -->
+                <div class="section flex-1">
+                    <div class="section-title gray">📄 ON DONNE</div>
+                    <div class="section-content scrollable">
+                        ${Object.keys(documentsParCategorie).length > 0 ? 
+                          Object.entries(documentsParCategorie).map(([category, docs]) => `
+                            <div class="on-donne-category">
+                                <div class="on-donne-category-title">${category}</div>
+                                ${docs.map(doc => `
+                                    <div class="on-donne-item">
+                                        ✓ ${doc.nom}${doc.detail ? ` <span class="on-donne-detail">— ${doc.detail}</span>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                          `).join('') 
+                        : '<p style="color: #94a3b8; font-style: italic; font-size: 6pt;">Aucun document</p>'}
+                    </div>
+                </div>
+
+                <!-- ON DEMANDE -->
+                <div class="section flex-1">
+                    <div class="section-title gray">❓ ON DEMANDE</div>
+                    <div class="on-demande-box">
+                        ${onDemande || '<span style="color: #94a3b8; font-style: italic;">Travail à réaliser...</span>'}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            BTS Bâtiment - Fiche de séance - ${new Date().toLocaleDateString('fr-FR')}
+        </div>
+    </div>
+</body>
+</html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.print();
+    };
+  };
+
+  // Toggle un moyen dans "On donne"
+  const toggleOnDonne = (moyen) => {
+    setOnDonne(prev => ({
+      ...prev,
+      [moyen]: !prev[moyen]
+    }));
+  };
+
+  // Mettre à jour le détail d'un moyen
+  const updateOnDonneDetail = (moyen, detail) => {
+    setOnDonneDetails(prev => ({
+      ...prev,
+      [moyen]: detail
+    }));
+  };
+
+  // Toggle une catégorie (déplier/replier)
+  const toggleCategory = (category) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
+
+  // Ajouter un champ personnalisé à une catégorie
+  const addCustomField = (category) => {
+    const newField = { id: Date.now(), nom: '', detail: '' };
+    setCustomFields(prev => ({
+      ...prev,
+      [category]: [...(prev[category] || []), newField]
+    }));
+  };
+
+  // Mettre à jour un champ personnalisé
+  const updateCustomField = (category, fieldId, key, value) => {
+    setCustomFields(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).map(field => 
+        field.id === fieldId ? { ...field, [key]: value } : field
+      )
+    }));
+  };
+
+  // Supprimer un champ personnalisé
+  const removeCustomField = (category, fieldId) => {
+    setCustomFields(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).filter(field => field.id !== fieldId)
+    }));
+  };
+
+  // Fonction pour rendre les items d'une catégorie (récursif pour sous-catégories)
+  const renderCategoryItems = (items, categoryPath) => {
+    if (Array.isArray(items)) {
+      return items.map((item, idx) => {
+        const itemKey = `${categoryPath}::${item}`;
+        return (
+          <div key={idx} style={{ marginBottom: '10px' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'flex-start', 
+              gap: '10px',
+              cursor: 'pointer',
+              padding: '8px',
+              borderRadius: '6px',
+              background: onDonne[itemKey] ? 'rgba(96, 165, 250, 0.1)' : 'transparent',
+              border: onDonne[itemKey] ? '1px solid rgba(96, 165, 250, 0.3)' : '1px solid transparent',
+              transition: 'all 0.2s ease'
+            }}>
+              <input
+                type="checkbox"
+                checked={onDonne[itemKey] || false}
+                onChange={() => toggleOnDonne(itemKey)}
+                style={{ 
+                  width: '18px', 
+                  height: '18px', 
+                  marginTop: '2px',
+                  accentColor: '#60a5fa'
+                }}
+              />
+              <span style={{ color: '#e2e8f0', fontSize: '13px' }}>{item}</span>
+            </label>
+            {onDonne[itemKey] && (
+              <input
+                type="text"
+                value={onDonneDetails[itemKey] || ''}
+                onChange={(e) => updateOnDonneDetail(itemKey, e.target.value)}
+                placeholder="Précisions (ex: pages 1-5, version du 12/01...)"
+                style={{
+                  width: 'calc(100% - 28px)',
+                  marginLeft: '28px',
+                  marginTop: '6px',
+                  padding: '8px 12px',
+                  background: 'rgba(30, 41, 59, 0.8)',
+                  border: '1px solid rgba(96, 165, 250, 0.3)',
+                  borderRadius: '6px',
+                  color: '#e2e8f0',
+                  fontSize: '12px'
+                }}
+              />
+            )}
+          </div>
+        );
+      });
+    } else if (typeof items === 'object') {
+      // Sous-catégories
+      return Object.entries(items).map(([subCat, subItems]) => (
+        <div key={subCat} style={{ 
+          marginBottom: '12px',
+          marginLeft: '12px',
+          paddingLeft: '12px',
+          borderLeft: '2px solid rgba(148, 163, 184, 0.2)'
+        }}>
+          <div style={{ 
+            color: '#94a3b8', 
+            fontSize: '12px', 
+            fontWeight: 600,
+            marginBottom: '8px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}>
+            {subCat}
+          </div>
+          {renderCategoryItems(subItems, `${categoryPath}::${subCat}`)}
+        </div>
+      ));
+    }
+    return null;
   };
 
   return (
@@ -1625,6 +2250,433 @@ function FormulaireBTSEBCR() {
                   ))}
                 </div>
               )}
+
+              {/* Mode Édition - Fiche de séance */}
+              <div style={{ 
+                marginBottom: '24px',
+                padding: '20px',
+                background: 'rgba(16, 185, 129, 0.1)',
+                borderRadius: '12px',
+                border: '1px solid rgba(16, 185, 129, 0.3)'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  marginBottom: '16px'
+                }}>
+                  <h3 style={{ 
+                    color: '#10b981', 
+                    fontSize: '14px', 
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span>✏️</span> Mode Édition - Fiche de séance
+                  </h3>
+                  <button
+                    onClick={() => setEditMode(!editMode)}
+                    style={{
+                      background: editMode ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                      border: `1px solid ${editMode ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`,
+                      borderRadius: '8px',
+                      color: editMode ? '#ef4444' : '#10b981',
+                      padding: '8px 16px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: 600
+                    }}
+                  >
+                    {editMode ? '✕ Fermer l\'édition' : '✎ Ouvrir l\'édition'}
+                  </button>
+                </div>
+
+                {editMode && (
+                  <div>
+                    {/* Numéro et Titre de la séance */}
+                    <div style={{ 
+                      display: 'grid', 
+                      gridTemplateColumns: '150px 1fr', 
+                      gap: '16px',
+                      marginBottom: '20px'
+                    }}>
+                      <div>
+                        <label style={{ 
+                          display: 'block', 
+                          color: '#94a3b8', 
+                          fontSize: '12px', 
+                          marginBottom: '6px',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px'
+                        }}>N° Séance</label>
+                        <input
+                          type="text"
+                          value={seanceNumero}
+                          onChange={(e) => setSeanceNumero(e.target.value)}
+                          placeholder="Ex: 1, 2.1..."
+                          style={{
+                            width: '100%',
+                            padding: '10px 12px',
+                            background: 'rgba(30, 41, 59, 0.8)',
+                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderRadius: '8px',
+                            color: '#e2e8f0',
+                            fontSize: '14px'
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ 
+                          display: 'block', 
+                          color: '#94a3b8', 
+                          fontSize: '12px', 
+                          marginBottom: '6px',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px'
+                        }}>Titre de la séance</label>
+                        <input
+                          type="text"
+                          value={seanceTitre}
+                          onChange={(e) => setSeanceTitre(e.target.value)}
+                          placeholder="Ex: Analyse d'un dossier de consultation..."
+                          style={{
+                            width: '100%',
+                            padding: '10px 12px',
+                            background: 'rgba(30, 41, 59, 0.8)',
+                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderRadius: '8px',
+                            color: '#e2e8f0',
+                            fontSize: '14px'
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* ON DONNE - Ressources documentaires */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <h4 style={{ 
+                        color: '#60a5fa', 
+                        fontSize: '13px', 
+                        fontWeight: 600, 
+                        marginBottom: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}>
+                        <span>📄</span> ON DONNE (cocher les documents fournis)
+                      </h4>
+                      <div style={{
+                        background: 'rgba(30, 41, 59, 0.5)',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        maxHeight: '500px',
+                        overflowY: 'auto'
+                      }}>
+                        {Object.entries(ressourcesDocumentaires).map(([category, items]) => (
+                          <div key={category} style={{ 
+                            marginBottom: '12px',
+                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderRadius: '8px',
+                            overflow: 'hidden'
+                          }}>
+                            {/* En-tête de catégorie */}
+                            <div 
+                              onClick={() => toggleCategory(category)}
+                              style={{ 
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '10px 12px',
+                                background: 'rgba(96, 165, 250, 0.15)',
+                                cursor: 'pointer',
+                                userSelect: 'none'
+                              }}
+                            >
+                              <span style={{ 
+                                color: '#60a5fa', 
+                                fontWeight: 600, 
+                                fontSize: '12px'
+                              }}>
+                                {expandedCategories[category] ? '▼' : '▶'} {category}
+                              </span>
+                              <span style={{
+                                color: '#94a3b8',
+                                fontSize: '11px'
+                              }}>
+                                {Object.entries(onDonne).filter(([k, v]) => k.startsWith(category) && v).length} sélectionné(s)
+                              </span>
+                            </div>
+                            
+                            {/* Contenu de la catégorie */}
+                            {expandedCategories[category] && (
+                              <div style={{ padding: '12px' }}>
+                                {renderCategoryItems(items, category)}
+                                
+                                {/* Champs personnalisés */}
+                                {(customFields[category] || []).map(field => (
+                                  <div key={field.id} style={{ 
+                                    marginBottom: '10px',
+                                    padding: '10px',
+                                    background: 'rgba(16, 185, 129, 0.1)',
+                                    borderRadius: '6px',
+                                    border: '1px solid rgba(16, 185, 129, 0.3)'
+                                  }}>
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                                      <input
+                                        type="checkbox"
+                                        checked={onDonne[`${category}::custom::${field.id}`] || false}
+                                        onChange={() => toggleOnDonne(`${category}::custom::${field.id}`)}
+                                        style={{ width: '16px', height: '16px', accentColor: '#10b981' }}
+                                      />
+                                      <input
+                                        type="text"
+                                        value={field.nom}
+                                        onChange={(e) => updateCustomField(category, field.id, 'nom', e.target.value)}
+                                        placeholder="Nom du document personnalisé..."
+                                        style={{
+                                          flex: 1,
+                                          padding: '6px 10px',
+                                          background: 'rgba(30, 41, 59, 0.8)',
+                                          border: '1px solid rgba(16, 185, 129, 0.3)',
+                                          borderRadius: '4px',
+                                          color: '#e2e8f0',
+                                          fontSize: '12px'
+                                        }}
+                                      />
+                                      <button
+                                        onClick={() => removeCustomField(category, field.id)}
+                                        style={{
+                                          background: 'rgba(239, 68, 68, 0.2)',
+                                          border: '1px solid rgba(239, 68, 68, 0.3)',
+                                          borderRadius: '4px',
+                                          color: '#ef4444',
+                                          padding: '4px 8px',
+                                          cursor: 'pointer',
+                                          fontSize: '11px'
+                                        }}
+                                      >
+                                        ✕
+                                      </button>
+                                    </div>
+                                    {onDonne[`${category}::custom::${field.id}`] && (
+                                      <input
+                                        type="text"
+                                        value={field.detail}
+                                        onChange={(e) => updateCustomField(category, field.id, 'detail', e.target.value)}
+                                        placeholder="Précisions..."
+                                        style={{
+                                          width: 'calc(100% - 24px)',
+                                          marginLeft: '24px',
+                                          padding: '6px 10px',
+                                          background: 'rgba(30, 41, 59, 0.8)',
+                                          border: '1px solid rgba(16, 185, 129, 0.3)',
+                                          borderRadius: '4px',
+                                          color: '#e2e8f0',
+                                          fontSize: '11px'
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                ))}
+                                
+                                {/* Bouton ajouter champ personnalisé */}
+                                <button
+                                  onClick={() => addCustomField(category)}
+                                  style={{
+                                    width: '100%',
+                                    padding: '8px',
+                                    marginTop: '8px',
+                                    background: 'rgba(16, 185, 129, 0.1)',
+                                    border: '1px dashed rgba(16, 185, 129, 0.4)',
+                                    borderRadius: '6px',
+                                    color: '#10b981',
+                                    cursor: 'pointer',
+                                    fontSize: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px'
+                                  }}
+                                >
+                                  <span>+</span> Ajouter un document personnalisé
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* ON DEMANDE */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <h4 style={{ 
+                        color: '#f59e0b', 
+                        fontSize: '13px', 
+                        fontWeight: 600, 
+                        marginBottom: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}>
+                        <span>❓</span> ON DEMANDE (travail à réaliser par l'étudiant)
+                      </h4>
+                      <textarea
+                        value={onDemande}
+                        onChange={(e) => setOnDemande(e.target.value)}
+                        placeholder={"Décrire le travail demandé à l'étudiant...\n\nExemple :\n- Analyser le CCTP et identifier les exigences\n- Proposer une solution technique pour...\n- Réaliser un croquis de..."}
+                        style={{
+                          width: '100%',
+                          minHeight: '150px',
+                          padding: '12px',
+                          background: 'rgba(30, 41, 59, 0.8)',
+                          border: '1px solid rgba(245, 158, 11, 0.3)',
+                          borderRadius: '8px',
+                          color: '#e2e8f0',
+                          fontSize: '13px',
+                          resize: 'vertical',
+                          lineHeight: '1.5'
+                        }}
+                      />
+                    </div>
+
+                    {/* SAVOIRS ASSOCIÉS */}
+                    <div style={{ marginBottom: '20px' }}>
+                      <h4 style={{ 
+                        color: '#4ade80', 
+                        fontSize: '13px', 
+                        fontWeight: 600, 
+                        marginBottom: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}>
+                        <span>📚</span> SAVOIRS ASSOCIÉS (sélectionner pour inclure dans la fiche)
+                      </h4>
+                      <div style={{
+                        background: 'rgba(30, 41, 59, 0.5)',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '8px'
+                      }}>
+                        {connaissancesGlobales.map(savoir => {
+                          const isLinked = availableCompetences.some(comp => savoir.competences.includes(comp.id));
+                          return (
+                            <label 
+                              key={savoir.id}
+                              style={{ 
+                                display: 'flex', 
+                                alignItems: 'flex-start', 
+                                gap: '8px',
+                                cursor: 'pointer',
+                                padding: '8px',
+                                borderRadius: '6px',
+                                background: selectedSavoirs[savoir.id] 
+                                  ? 'rgba(74, 222, 128, 0.15)' 
+                                  : isLinked 
+                                    ? 'rgba(74, 222, 128, 0.05)' 
+                                    : 'transparent',
+                                border: selectedSavoirs[savoir.id] 
+                                  ? '1px solid rgba(74, 222, 128, 0.4)' 
+                                  : isLinked 
+                                    ? '1px solid rgba(74, 222, 128, 0.2)' 
+                                    : '1px solid transparent',
+                                opacity: isLinked ? 1 : 0.5,
+                                transition: 'all 0.2s ease'
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedSavoirs[savoir.id] || false}
+                                onChange={() => setSelectedSavoirs(prev => ({
+                                  ...prev,
+                                  [savoir.id]: !prev[savoir.id]
+                                }))}
+                                style={{ 
+                                  width: '16px', 
+                                  height: '16px', 
+                                  marginTop: '2px',
+                                  accentColor: '#4ade80'
+                                }}
+                              />
+                              <div>
+                                <span style={{ 
+                                  color: isLinked ? '#4ade80' : '#94a3b8', 
+                                  fontWeight: 600,
+                                  fontSize: '11px',
+                                  marginRight: '6px'
+                                }}>
+                                  {savoir.id}.
+                                </span>
+                                <span style={{ 
+                                  color: '#e2e8f0', 
+                                  fontSize: '12px' 
+                                }}>
+                                  {savoir.nom}
+                                </span>
+                                {isLinked && (
+                                  <span style={{
+                                    marginLeft: '6px',
+                                    background: 'rgba(74, 222, 128, 0.2)',
+                                    color: '#4ade80',
+                                    padding: '1px 5px',
+                                    borderRadius: '3px',
+                                    fontSize: '9px'
+                                  }}>
+                                    lié
+                                  </span>
+                                )}
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Bouton Export PDF */}
+                    <div style={{ 
+                      display: 'flex', 
+                      justifyContent: 'center',
+                      paddingTop: '16px',
+                      borderTop: '1px solid rgba(148, 163, 184, 0.2)'
+                    }}>
+                      <button
+                        onClick={exportToPDF}
+                        style={{
+                          background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                          border: 'none',
+                          borderRadius: '10px',
+                          color: 'white',
+                          padding: '14px 32px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-2px)';
+                          e.target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
+                        }}
+                      >
+                        <span style={{ fontSize: '18px' }}>📥</span>
+                        Exporter en PDF
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Connaissances globales liées */}
               {availableCompetences.length > 0 && (
