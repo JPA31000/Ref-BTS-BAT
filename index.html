@@ -27,6 +27,9 @@
 const { useState, useMemo } = React;
 
 
+// Logo Lycée Urbain Vitry (auteur de l'application)
+const LOGO_LYCEE_URBAIN_VITRY = 'data:image/png;base64,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';
+
 // Liste des ressources documentaires selon le référentiel BTS Bâtiment
 const ressourcesDocumentaires = {
   "0. Identification du projet": [
@@ -789,7 +792,7 @@ function FormulaireBTSEBCR() {
   const [selectedTache, setSelectedTache] = useState(null);
   const [selectedCompetence, setSelectedCompetence] = useState(null);
   const [viewMode, setViewMode] = useState('competences');
-  const [showSeanceModal, setShowSeanceModal] = useState(false);
+  const [showSeanceModal, setShowSeanceModal] = useState(false); // Gardé pour compatibilité mais non utilisé
   
   // États pour le mode édition de séance
   const [editMode, setEditMode] = useState(false);
@@ -797,10 +800,147 @@ function FormulaireBTSEBCR() {
   const [seanceTitre, setSeanceTitre] = useState('');
   const [onDonne, setOnDonne] = useState({});
   const [onDonneDetails, setOnDonneDetails] = useState({});
-  const [onDemande, setOnDemande] = useState('');
+  const [onDemande, setOnDemande] = useState(''); // Champ libre pour ON DEMANDE
+  const [selectedAttendus, setSelectedAttendus] = useState({}); // Résultats attendus cochés
+  const [customAttendus, setCustomAttendus] = useState({}); // Textes personnalisés pour les attendus
+  const [customOnDemande, setCustomOnDemande] = useState([]); // Attendus personnalisés ajoutés par l'utilisateur
   const [customFields, setCustomFields] = useState({}); // Champs personnalisés par catégorie
   const [expandedCategories, setExpandedCategories] = useState({}); // Catégories dépliées
-  const [selectedSavoirs, setSelectedSavoirs] = useState({}); // Savoirs associés sélectionnés
+  const [selectedSavoirs, setSelectedSavoirs] = useState({}); // Connaissances globales sélectionnées
+  const [logoLycee, setLogoLycee] = useState(null); // Logo du lycée uploadé
+
+  // Fonction pour gérer l'upload du logo
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setLogoLycee(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Fonction pour transformer les résultats attendus passifs en phrases indicatives actives
+  const transformerEnIndicatif = (texte) => {
+    // Dictionnaire de transformations passif -> indicatif actif
+    const transformations = [
+      // Patterns avec "est/sont + participe passé" -> verbe actif
+      { pattern: /^Une synthèse globale justifiée et structurée est rédigée/i, replacement: "Rédiger une synthèse globale justifiée et structurée" },
+      { pattern: /^Les plans de structure sont produits$/i, replacement: "Produire les plans de structure" },
+      { pattern: /^Les éléments porteurs et leurs impacts sont identifiés$/i, replacement: "Identifier les éléments porteurs et leurs impacts" },
+      { pattern: /^Les incohérences éventuelles sont relevées$/i, replacement: "Relever les incohérences éventuelles" },
+      { pattern: /^Des solutions simples et adaptées sont proposées$/i, replacement: "Proposer des solutions simples et adaptées" },
+      { pattern: /^Des plans d'exécution sont réalisés$/i, replacement: "Réaliser des plans d'exécution" },
+      { pattern: /^Le PGCSPS est analysé/i, replacement: "Analyser le PGCSPS" },
+      { pattern: /^Le PPSPS est complété/i, replacement: "Compléter le PPSPS avec le PIC, les modes opératoires…" },
+      { pattern: /^Les risques sont identifiés et évalués$/i, replacement: "Identifier et évaluer les risques" },
+      { pattern: /^Les moyens de prévention sont choisis/i, replacement: "Choisir les moyens de prévention en fonction de l'évaluation et des principes généraux de prévention" },
+      { pattern: /^Les risques environnementaux sont anticipés$/i, replacement: "Anticiper les risques environnementaux" },
+      { pattern: /^Les acteurs sont identifiés$/i, replacement: "Identifier les acteurs" },
+      { pattern: /^Les documents réglementaires et normatifs sont connus et complétés$/i, replacement: "Connaître et compléter les documents réglementaires et normatifs" },
+      { pattern: /^Les méthodes de gestion des déchets sont mises en place$/i, replacement: "Mettre en place les méthodes de gestion des déchets" },
+      { pattern: /^L'impact environnemental est optimisé$/i, replacement: "Optimiser l'impact environnemental" },
+      { pattern: /^Le CCTP est analysé/i, replacement: "Analyser le CCTP en identifiant les exigences de qualité" },
+      { pattern: /^Les points singuliers et les interfaces sur chantier sont identifiés$/i, replacement: "Identifier les points singuliers et les interfaces sur chantier" },
+      { pattern: /^Les services compétents.*sont informés/i, replacement: "Informer les services compétents (DREETS, CARSAT, OPPBTP…) de l'ouverture du chantier" },
+      { pattern: /^À partir de la déclaration de travaux, les DICT sont demandées/i, replacement: "Demander, étudier et exploiter les DICT à partir de la déclaration de travaux" },
+      { pattern: /^Les autorisations nécessaires.*sont demandées/i, replacement: "Demander les autorisations nécessaires (voirie, survol, engins de levage…) aux services compétents" },
+      { pattern: /^Le planning de chantier objectif est réalisé/i, replacement: "Réaliser le planning de chantier objectif à partir du planning client (avec marge de sécurité)" },
+      { pattern: /^Les modes constructifs possibles sont comparés/i, replacement: "Comparer les modes constructifs possibles et justifier le choix selon les contraintes techniques, économiques, environnementales et de prévention" },
+      { pattern: /^Un tableau de synthèse est réalisé$/i, replacement: "Réaliser un tableau de synthèse" },
+      { pattern: /^Les équipes sont définies$/i, replacement: "Définir les équipes" },
+      { pattern: /^Le type et la quantité de matériel sont définis/i, replacement: "Définir et optimiser le type et la quantité de matériel" },
+      { pattern: /^La charge de grue est réalisée/i, replacement: "Réaliser la charge de grue de manière cohérente" },
+      { pattern: /^Le type et la quantité de matériaux sont définis/i, replacement: "Définir et optimiser le type et la quantité de matériaux" },
+      { pattern: /^Le mode de fabrication du béton est choisi$/i, replacement: "Choisir le mode de fabrication du béton" },
+      { pattern: /^Les ouvrages élémentaires sont décomposés et quantifiés$/i, replacement: "Décomposer et quantifier les ouvrages élémentaires" },
+      { pattern: /^Le planning réalisé fait apparaître/i, replacement: "Faire apparaître dans le planning : la décomposition des tâches, l'enclenchement, la durée, les cadences" },
+      { pattern: /^Les jours non travaillés.*sont intégrés$/i, replacement: "Intégrer les jours non travaillés (congés, jours fériés, intempéries)" },
+      { pattern: /^Les principales phases de logistique.*sont définis$/i, replacement: "Définir les principales phases logistiques (livraisons…), les dates-jalons et le phasage" },
+      { pattern: /^La courbe de main d'œuvre est établie$/i, replacement: "Établir la courbe de main d'œuvre" },
+      { pattern: /^Le cyclage des verticaux et des horizontaux est réalisé$/i, replacement: "Réaliser le cyclage des verticaux et des horizontaux" },
+      { pattern: /^La rotation du matériel.*est réalisable/i, replacement: "Vérifier que la rotation du matériel (coffrage et sécurité) est réalisable et cohérente" },
+      { pattern: /^Le calepinage des éléments préfabriqués est défini$/i, replacement: "Définir le calepinage des éléments préfabriqués" },
+      { pattern: /^Le plan d'installation de chantier est réalisé/i, replacement: "Réaliser et mettre à jour le plan d'installation de chantier selon l'avancement" },
+      { pattern: /^Les moyens relatifs aux exigences.*sont définis$/i, replacement: "Définir les moyens relatifs aux exigences de qualité, de prévention et environnementales" },
+      { pattern: /^Les engins de levage sont choisis/i, replacement: "Choisir, dimensionner et positionner les engins de levage en intégrant les phases de montage/démontage" },
+      { pattern: /^Les zones de stockage sont définies$/i, replacement: "Définir les zones de stockage" },
+      { pattern: /^La base vie, les accès/i, replacement: "Définir la base vie, les accès, les circulations, les clôtures, les réseaux et les zones" },
+      { pattern: /^Les moyens de prévention sont choisis en fonction de cette évaluation$/i, replacement: "Choisir les moyens de prévention en fonction de l'évaluation" },
+      { pattern: /^Le matériel est choisi et adapté$/i, replacement: "Choisir et adapter le matériel" },
+      { pattern: /^Les méthodes d'exécution sont définies$/i, replacement: "Définir les méthodes d'exécution" },
+      { pattern: /^Les éléments suivants sont budgétés/i, replacement: "Budgéter les éléments suivants dans le cadre d'un déboursé sec : main d'œuvre, matériaux, matériels, sous-traitants" },
+      { pattern: /^Les frais de chantier sont évalués$/i, replacement: "Évaluer les frais de chantier" },
+      { pattern: /^Pour budgéter les matériaux.*sont consultés$/i, replacement: "Consulter les fournisseurs pour budgéter les matériaux et le matériel" },
+      // Bloc 3 - Suivi et encadrement
+      { pattern: /^Le bilan de chantier est réalisé$/i, replacement: "Réaliser le bilan de chantier" },
+      { pattern: /^Les ressources sont suivies et optimisées$/i, replacement: "Suivre et optimiser les ressources" },
+      { pattern: /^Les délais sont suivis$/i, replacement: "Suivre les délais" },
+      { pattern: /^Le budget travaux est actualisé$/i, replacement: "Actualiser le budget travaux" },
+      { pattern: /^Les écarts sont analysés$/i, replacement: "Analyser les écarts" },
+      { pattern: /^Des mesures correctives sont proposées$/i, replacement: "Proposer des mesures correctives" },
+      { pattern: /^Les documents de suivi sont renseignés$/i, replacement: "Renseigner les documents de suivi" },
+      { pattern: /^La situation de travaux est établie$/i, replacement: "Établir la situation de travaux" },
+      { pattern: /^Les avenants sont préparés$/i, replacement: "Préparer les avenants" },
+      { pattern: /^Le DOE est constitué$/i, replacement: "Constituer le DOE" },
+      { pattern: /^Les réserves sont levées$/i, replacement: "Lever les réserves" },
+      { pattern: /^Les consignes sont transmises$/i, replacement: "Transmettre les consignes" },
+      { pattern: /^L'équipe est organisée$/i, replacement: "Organiser l'équipe" },
+      { pattern: /^Les besoins en formation sont identifiés$/i, replacement: "Identifier les besoins en formation" },
+      { pattern: /^Le compte rendu de réunion est rédigé$/i, replacement: "Rédiger le compte rendu de réunion" },
+      { pattern: /^Les réunions sont préparées$/i, replacement: "Préparer les réunions" },
+      // Bloc 4 - Implantation et contrôle
+      { pattern: /^Le plan de contrôle est établi/i, replacement: "Établir le plan de contrôle en précisant les tolérances requises" },
+      { pattern: /^Le relevé des supports.*est effectué$/i, replacement: "Effectuer le relevé des supports en altimétrie et planimétrie" },
+      { pattern: /^La fiche de réception du lot.*est établie/i, replacement: "Établir la fiche de réception du lot en interface avec les mesures correctives exigées" },
+      { pattern: /^L'implantation des limites du chantier est matérialisée/i, replacement: "Matérialiser l'implantation des limites du chantier et la localisation des principales zones" },
+      { pattern: /^L'implantation des ouvrages est réalisée$/i, replacement: "Réaliser l'implantation des ouvrages" },
+      { pattern: /^Les fiches de réceptions sont remplies$/i, replacement: "Remplir les fiches de réception" },
+      { pattern: /^Les contrôles des solutions techniques.*sont réalisés$/i, replacement: "Réaliser les contrôles des solutions techniques et des matériaux" },
+      { pattern: /^Les contrôles des ouvrages sont réalisés/i, replacement: "Réaliser les contrôles des ouvrages conformément au plan de contrôle" },
+      { pattern: /^Les fiches de contrôles sont établies/i, replacement: "Établir et transmettre les fiches de contrôles" },
+      { pattern: /^Les non conformités sont identifiées/i, replacement: "Identifier et traiter les non-conformités" },
+    ];
+
+    // Appliquer les transformations
+    for (const { pattern, replacement } of transformations) {
+      if (pattern.test(texte)) {
+        return replacement;
+      }
+    }
+
+    // Si aucune transformation spécifique, tenter une transformation générique
+    // Pattern: "X est/sont + participe" -> "Verbe + X"
+    const genericPatterns = [
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(réalisé|réalisée|réalisés|réalisées)$/i, verb: "Réaliser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(défini|définie|définis|définies)$/i, verb: "Définir" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(identifié|identifiée|identifiés|identifiées)$/i, verb: "Identifier" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(établi|établie|établis|établies)$/i, verb: "Établir" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(analysé|analysée|analysés|analysées)$/i, verb: "Analyser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(vérifié|vérifiée|vérifiés|vérifiées)$/i, verb: "Vérifier" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(choisi|choisie|choisis|choisies)$/i, verb: "Choisir" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(préparé|préparée|préparés|préparées)$/i, verb: "Préparer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(complété|complétée|complétés|complétées)$/i, verb: "Compléter" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(produit|produite|produits|produites)$/i, verb: "Produire" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(transmis|transmise)$/i, verb: "Transmettre" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(renseigné|renseignée|renseignés|renseignées)$/i, verb: "Renseigner" },
+    ];
+
+    for (const { pattern, verb } of genericPatterns) {
+      const match = texte.match(pattern);
+      if (match) {
+        // Transformer "Les X sont réalisés" -> "Réaliser les X"
+        let sujet = match[1];
+        // Mettre en minuscule la première lettre du sujet
+        sujet = sujet.charAt(0).toLowerCase() + sujet.slice(1);
+        return `${verb} ${sujet}`;
+      }
+    }
+
+    // Si toujours pas de transformation, retourner le texte original
+    return texte;
+  };
 
   const currentBloc = useMemo(() => 
     data.blocs.find(b => b.id === selectedBloc), 
@@ -920,84 +1060,108 @@ function FormulaireBTSEBCR() {
     <meta charset="UTF-8">
     <title>Fiche de Séance${seanceNumero ? ' N°' + seanceNumero : ''} - BTS Bâtiment</title>
     <style>
+        /* Format A4 paysage : 297mm x 210mm (ratio 1.414) */
         @page { 
-            size: A4 landscape; 
-            margin: 5mm;
+            size: 297mm 210mm landscape;
+            margin: 0;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        html { 
+            width: 297mm;
+            height: 210mm;
+        }
         body { 
-            font-family: Arial, sans-serif; 
-            font-size: 7pt;
-            line-height: 1.2;
+            width: 297mm;
+            height: 210mm;
+            font-family: Arial, Helvetica, sans-serif; 
+            font-size: 8pt;
+            line-height: 1.25;
             color: #1e293b;
-            width: 287mm;
-            height: 190mm;
             overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            background: white;
         }
         .page-container {
-            width: 100%;
-            height: 100%;
+            width: 297mm;
+            height: 210mm;
+            max-width: 297mm;
+            max-height: 210mm;
+            padding: 5mm;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            page-break-after: avoid;
+            page-break-inside: avoid;
         }
         .header { 
             background: linear-gradient(135deg, #1e40af, #3b82f6);
             color: white;
-            padding: 4px 12px;
+            padding: 3mm 5mm;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 2mm;
+            margin-bottom: 3mm;
             flex-shrink: 0;
         }
         .header h1 { 
-            font-size: 11pt;
+            font-size: 13pt;
             font-weight: 700;
         }
         .header-right {
             text-align: right;
-            font-size: 7pt;
+            font-size: 9pt;
+            display: flex;
+            align-items: center;
+            gap: 4mm;
         }
         .header-right .seance-num {
-            font-size: 9pt;
+            font-size: 11pt;
             font-weight: 700;
             background: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 3px;
+            padding: 1.5mm 3mm;
+            border-radius: 1.5mm;
         }
         .main-content {
             display: flex;
-            gap: 8px;
+            gap: 4mm;
             flex: 1;
-            padding: 5px 0;
             min-height: 0;
+            overflow: hidden;
         }
         .column {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2mm;
             overflow: hidden;
             min-height: 0;
         }
         .column-left {
             background: #f8fafc;
-            border: 1px solid #3b82f6;
-            border-radius: 4px;
-            padding: 5px;
+            border: 0.5mm solid #3b82f6;
+            border-radius: 2mm;
+            padding: 3mm;
         }
         .column-right {
             background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            padding: 5px;
+            border: 0.3mm solid #cbd5e1;
+            border-radius: 2mm;
+            padding: 3mm;
         }
         .column-title {
-            font-size: 8pt;
+            font-size: 9pt;
             font-weight: 700;
-            padding: 3px 6px;
-            border-radius: 3px;
+            padding: 1.5mm 3mm;
+            border-radius: 1.5mm;
             text-align: center;
             flex-shrink: 0;
+            margin-bottom: 2mm;
         }
         .column-left .column-title {
             background: #3b82f6;
@@ -1008,7 +1172,7 @@ function FormulaireBTSEBCR() {
             color: white;
         }
         .section {
-            margin-bottom: 3px;
+            margin-bottom: 2mm;
             flex-shrink: 0;
         }
         .section.flex-1 {
@@ -1018,12 +1182,12 @@ function FormulaireBTSEBCR() {
             flex-direction: column;
         }
         .section-title {
-            font-size: 6.5pt;
+            font-size: 8pt;
             font-weight: 700;
             color: white;
-            padding: 2px 5px;
-            border-radius: 2px;
-            margin-bottom: 2px;
+            padding: 1mm 2mm;
+            border-radius: 1mm;
+            margin-bottom: 1mm;
         }
         .section-title.blue { background: #2563eb; }
         .section-title.green { background: #16a34a; }
@@ -1032,11 +1196,11 @@ function FormulaireBTSEBCR() {
         .section-title.red { background: #dc2626; }
         .section-title.gray { background: #64748b; }
         .section-content {
-            font-size: 6.5pt;
-            padding: 3px 5px;
+            font-size: 7.5pt;
+            padding: 2mm;
             background: white;
-            border-radius: 2px;
-            border: 1px solid #e2e8f0;
+            border-radius: 1mm;
+            border: 0.2mm solid #e2e8f0;
             overflow: hidden;
         }
         .section-content.scrollable {
@@ -1046,119 +1210,132 @@ function FormulaireBTSEBCR() {
         }
         .badge {
             display: inline-block;
-            padding: 0px 4px;
-            border-radius: 2px;
-            font-size: 6pt;
+            padding: 0.5mm 1.5mm;
+            border-radius: 1mm;
+            font-size: 7pt;
             font-weight: 600;
-            margin-right: 3px;
+            margin-right: 1.5mm;
         }
         .badge-bloc { background: #dbeafe; color: #1e40af; }
         .badge-pole { background: #dcfce7; color: #166534; }
         .badge-tache { background: #f3e8ff; color: #7c3aed; }
         .badge-comp { background: #fef3c7; color: #b45309; }
         .info-row {
-            margin-bottom: 1px;
-            padding: 1px 0;
-            font-size: 6.5pt;
+            margin-bottom: 0.5mm;
+            padding: 0.5mm 0;
+            font-size: 7.5pt;
         }
         .list-compact {
             margin: 0;
-            padding-left: 12px;
+            padding-left: 4mm;
         }
         .list-compact li {
-            margin-bottom: 1px;
-            font-size: 6.5pt;
+            margin-bottom: 0.5mm;
+            font-size: 7.5pt;
         }
         .competence-mini {
             background: #f1f5f9;
-            padding: 2px 4px;
-            border-radius: 2px;
-            margin-bottom: 2px;
-            border-left: 2px solid #3b82f6;
+            padding: 1.5mm 2mm;
+            border-radius: 1mm;
+            margin-bottom: 1.5mm;
+            border-left: 0.8mm solid #3b82f6;
         }
         .competence-mini-title {
             font-weight: 600;
             color: #1e40af;
-            font-size: 6.5pt;
+            font-size: 7.5pt;
         }
         .criteres-list {
-            font-size: 6pt;
+            font-size: 7pt;
             color: #475569;
-            margin-top: 1px;
+            margin-top: 0.5mm;
         }
         .on-donne-category {
-            margin-bottom: 3px;
+            margin-bottom: 2mm;
         }
         .on-donne-category-title {
             background: #e2e8f0;
             color: #475569;
-            padding: 1px 4px;
+            padding: 1mm 2mm;
             font-weight: 600;
-            font-size: 6pt;
-            border-radius: 1px;
-            margin-bottom: 1px;
+            font-size: 7pt;
+            border-radius: 0.5mm;
+            margin-bottom: 1mm;
         }
         .on-donne-item {
-            padding: 1px 4px;
+            padding: 1mm 2mm;
             background: #f8fafc;
-            margin-bottom: 1px;
-            border-left: 2px solid #94a3b8;
-            font-size: 6.5pt;
+            margin-bottom: 0.5mm;
+            border-left: 0.6mm solid #94a3b8;
+            font-size: 7.5pt;
         }
         .on-donne-detail {
             color: #64748b;
             font-style: italic;
-            font-size: 6pt;
+            font-size: 7pt;
         }
         .on-demande-box {
             background: white;
-            border: 1px solid #cbd5e1;
-            border-radius: 2px;
-            padding: 4px;
+            border: 0.3mm solid #cbd5e1;
+            border-radius: 1mm;
+            padding: 2mm;
             white-space: pre-wrap;
-            font-size: 7pt;
+            font-size: 8pt;
             flex: 1;
             overflow-y: auto;
         }
         .seance-header {
             background: #475569;
             color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
+            padding: 2mm 3mm;
+            border-radius: 1.5mm;
             text-align: center;
             flex-shrink: 0;
+            margin-bottom: 2mm;
         }
         .seance-header .numero {
-            font-size: 9pt;
+            font-size: 11pt;
             font-weight: 700;
         }
         .seance-header .titre {
-            font-size: 7pt;
-            margin-top: 2px;
+            font-size: 9pt;
+            margin-top: 1mm;
             font-weight: 400;
         }
         .savoir-item {
             display: inline-block;
             background: #dcfce7;
             color: #166534;
-            padding: 1px 4px;
-            border-radius: 2px;
-            font-size: 6pt;
-            margin: 1px;
+            padding: 0.5mm 1.5mm;
+            border-radius: 1mm;
+            font-size: 7pt;
+            margin: 0.5mm;
         }
         .footer {
-            font-size: 6pt;
+            font-size: 7pt;
             color: #94a3b8;
             text-align: center;
-            padding: 2px 0;
+            padding: 1.5mm 0 0 0;
             flex-shrink: 0;
+            margin-top: auto;
         }
         @media print {
-            body { 
-                width: 287mm;
-                height: 190mm;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+            @page {
+                size: 297mm 210mm landscape;
+                margin: 0;
+            }
+            html, body { 
+                width: 297mm;
+                height: 210mm;
+                overflow: hidden;
+            }
+            .page-container {
+                width: 297mm;
+                height: 210mm;
+                max-width: 297mm;
+                max-height: 210mm;
+                page-break-after: avoid;
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -1166,12 +1343,13 @@ function FormulaireBTSEBCR() {
 <body>
     <div class="page-container">
         <div class="header">
-            <div>
+            <div style="display: flex; align-items: center; gap: 15px;">
                 <h1>📋 FICHE DE SÉANCE - BTS BÂTIMENT</h1>
             </div>
             <div class="header-right">
                 ${seanceNumero ? `<span class="seance-num">Séance N° ${seanceNumero}</span>` : ''}
-                <div style="margin-top: 2px; font-size: 6pt;">${new Date().toLocaleDateString('fr-FR')}</div>
+                <div style="font-size: 8pt;">${new Date().toLocaleDateString('fr-FR')}</div>
+                ${logoLycee ? `<img src="${logoLycee}" style="height: 12mm; border-radius: 1mm;" alt="Logo Lycée">` : ''}
             </div>
         </div>
 
@@ -1232,10 +1410,10 @@ function FormulaireBTSEBCR() {
                     </div>
                 </div>
 
-                <!-- Savoirs associés -->
+                <!-- Connaissances globales -->
                 ${savoirsSelectionnes.length > 0 ? `
                 <div class="section">
-                    <div class="section-title red">📚 Savoirs</div>
+                    <div class="section-title red">📚 Connaissances</div>
                     <div class="section-content">
                         ${savoirsSelectionnes.map(s => `<span class="savoir-item">${s.id}. ${s.nom}</span>`).join('')}
                     </div>
@@ -1276,7 +1454,44 @@ function FormulaireBTSEBCR() {
                 <div class="section flex-1">
                     <div class="section-title gray">❓ ON DEMANDE</div>
                     <div class="on-demande-box">
-                        ${onDemande || '<span style="color: #94a3b8; font-style: italic;">Travail à réaliser...</span>'}
+                        ${(() => {
+                          // Collecter tous les attendus sélectionnés
+                          const attendusSelectionnes = [];
+                          
+                          // Attendus du référentiel
+                          Object.entries(selectedAttendus).filter(([k, v]) => v).forEach(([key]) => {
+                            const text = customAttendus[key] || '';
+                            if (text) attendusSelectionnes.push(text);
+                          });
+                          
+                          // Attendus personnalisés
+                          customOnDemande.filter(item => item.selected && item.text).forEach(item => {
+                            attendusSelectionnes.push(item.text);
+                          });
+                          
+                          if (attendusSelectionnes.length === 0 && !onDemande) {
+                            return '<span style="color: #94a3b8; font-style: italic;">Travail à réaliser...</span>';
+                          }
+                          
+                          let html = '';
+                          if (attendusSelectionnes.length > 0) {
+                            html += '<ul style="margin: 0; padding-left: 4mm; list-style-type: disc;">';
+                            attendusSelectionnes.forEach(text => {
+                              html += '<li style="margin-bottom: 1mm; font-size: 7.5pt; line-height: 1.3;">' + text + '</li>';
+                            });
+                            html += '</ul>';
+                          }
+                          if (onDemande) {
+                            if (attendusSelectionnes.length > 0) {
+                              html += '<div style="margin-top: 2mm; padding-top: 2mm; border-top: 0.3mm dashed #cbd5e1;">';
+                            }
+                            html += '<div style="font-size: 7pt; color: #64748b; white-space: pre-wrap;">' + onDemande + '</div>';
+                            if (attendusSelectionnes.length > 0) {
+                              html += '</div>';
+                            }
+                          }
+                          return html;
+                        })()}
                     </div>
                 </div>
             </div>
@@ -1693,7 +1908,7 @@ function FormulaireBTSEBCR() {
             color: '#64748b',
             margin: 0
           }}>
-            Jean-Philippe Amat — V1.2 — 2026
+            Jean-Philippe Amat — v1.4 — 2026
           </p>
         </div>
 
@@ -1868,906 +2083,40 @@ function FormulaireBTSEBCR() {
             )}
           </div>
 
-          {/* Bouton Aide à la création de séance */}
-          {selectedBloc && (
+          {/* Message d'indication si tous les champs ne sont pas renseignés */}
+          {selectedBloc && !(selectedPole && selectedTache && selectedCompetence) && (
             <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(148, 163, 184, 0.2)' }}>
-              <button
-                onClick={() => setShowSeanceModal(true)}
-                style={{
-                  width: '100%',
-                  padding: '16px 24px',
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  color: '#fff',
-                  fontSize: '15px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)'
-                }}
-                onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-                onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-              >
-                <span style={{ fontSize: '20px' }}>📋</span>
-                Aide à la création de séance
-              </button>
+              <div style={{
+                background: 'rgba(245, 158, 11, 0.1)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                borderRadius: '8px',
+                padding: '16px',
+                textAlign: 'center'
+              }}>
+                <span style={{ color: '#f59e0b', fontSize: '14px' }}>
+                  💡 Renseignez tous les filtres (Bloc, Pôle, Tâche et Compétence) pour accéder à la création de séance
+                </span>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Modal Aide à la création de séance */}
-        {showSeanceModal && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(8px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px'
-          }} onClick={() => setShowSeanceModal(false)}>
-            <div 
-              className="glass-card animate-in"
-              style={{
-                maxWidth: '900px',
-                maxHeight: '90vh',
-                overflow: 'auto',
-                padding: '32px',
-                position: 'relative'
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header Modal */}
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'flex-start',
-                marginBottom: '24px'
-              }}>
-                <div>
-                  <h2 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: 700, 
-                    color: '#10b981',
-                    marginBottom: '8px'
-                  }}>
-                    📋 Aide à la création de séance
-                  </h2>
-                  <p style={{ color: '#94a3b8', fontSize: '14px' }}>
-                    Récapitulatif des éléments selon vos choix de filtrage
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowSeanceModal(false)}
-                  style={{
-                    background: 'rgba(239, 68, 68, 0.2)',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    borderRadius: '8px',
-                    color: '#ef4444',
-                    padding: '8px 12px',
-                    cursor: 'pointer',
-                    fontSize: '14px'
-                  }}
-                >
-                  ✕ Fermer
-                </button>
-              </div>
-
-              {/* Contexte sélectionné */}
-              <div style={{
-                background: 'rgba(251, 191, 36, 0.1)',
-                borderRadius: '12px',
-                padding: '16px',
-                marginBottom: '24px',
-                borderLeft: '4px solid #fbbf24'
-              }}>
-                <h3 style={{ color: '#fbbf24', fontSize: '14px', fontWeight: 600, marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  Contexte sélectionné
-                </h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {currentBloc && (
-                    <span className="tag niveau-4">Bloc {currentBloc.id} - {currentBloc.nom}</span>
-                  )}
-                  {currentPole && (
-                    <span className="tag niveau-3">{currentPole.id} - {currentPole.nom}</span>
-                  )}
-                  {currentTache && (
-                    <span className="tag niveau-2">{currentTache.id}</span>
-                  )}
-                  {currentCompetence && (
-                    <span className="tag niveau-1">{currentCompetence.id}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Conditions d'exercice */}
-              {currentPole?.conditionsExercice && (
-                <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ 
-                    color: '#60a5fa', 
-                    fontSize: '14px', 
-                    fontWeight: 600, 
-                    marginBottom: '16px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    <span>🔧</span> Moyens et ressources
-                  </h3>
-                  <div style={{
-                    background: 'rgba(96, 165, 250, 0.1)',
-                    borderRadius: '12px',
-                    padding: '16px'
-                  }}>
-                    <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                      {currentPole.conditionsExercice.moyens.map((moyen, idx) => (
-                        <li key={idx} style={{ color: '#e2e8f0', marginBottom: '8px', fontSize: '14px' }}>
-                          {moyen}
-                        </li>
-                      ))}
-                    </ul>
-                    <div style={{ 
-                      marginTop: '16px', 
-                      paddingTop: '12px', 
-                      borderTop: '1px solid rgba(96, 165, 250, 0.2)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}>
-                      <span style={{ color: '#94a3b8', fontSize: '13px' }}>Autonomie :</span>
-                      <span style={{
-                        background: currentPole.conditionsExercice.autonomie === 'Totale sur des ouvrages courants' 
-                          ? 'rgba(34, 197, 94, 0.2)' 
-                          : 'rgba(251, 191, 36, 0.2)',
-                        color: currentPole.conditionsExercice.autonomie === 'Totale sur des ouvrages courants'
-                          ? '#4ade80'
-                          : '#fbbf24',
-                        padding: '4px 10px',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        fontWeight: 600
-                      }}>
-                        {currentPole.conditionsExercice.autonomie}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Résultats attendus */}
-              {currentPole?.resultatsAttendus && (
-                <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ 
-                    color: '#c084fc', 
-                    fontSize: '14px', 
-                    fontWeight: 600, 
-                    marginBottom: '16px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    <span>🎯</span> Résultats attendus
-                  </h3>
-                  <div style={{
-                    background: 'rgba(192, 132, 252, 0.1)',
-                    borderRadius: '12px',
-                    padding: '16px'
-                  }}>
-                    {/* Si une tâche est sélectionnée, afficher seulement ses résultats */}
-                    {selectedTache && currentPole.resultatsAttendus[selectedTache] ? (
-                      <div>
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          marginBottom: '12px',
-                          paddingBottom: '8px',
-                          borderBottom: '1px solid rgba(192, 132, 252, 0.2)'
-                        }}>
-                          <span style={{
-                            background: 'rgba(192, 132, 252, 0.3)',
-                            color: '#c084fc',
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            fontSize: '11px',
-                            fontWeight: 600
-                          }}>{selectedTache}</span>
-                          <span style={{ color: '#94a3b8', fontSize: '12px' }}>
-                            {currentTache?.nom}
-                          </span>
-                        </div>
-                        {currentPole.resultatsAttendus[selectedTache].map((resultat, idx) => (
-                          <div key={idx} style={{ 
-                            display: 'flex', 
-                            alignItems: 'flex-start', 
-                            gap: '10px',
-                            marginBottom: '10px'
-                          }}>
-                            <span style={{
-                              width: '20px',
-                              height: '20px',
-                              background: 'rgba(192, 132, 252, 0.3)',
-                              borderRadius: '50%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '10px',
-                              color: '#c084fc',
-                              flexShrink: 0
-                            }}>✓</span>
-                            <span style={{ color: '#e2e8f0', fontSize: '14px' }}>{resultat}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      /* Sinon afficher tous les résultats groupés par tâche */
-                      Object.entries(currentPole.resultatsAttendus).map(([tacheId, resultats]) => (
-                        <div key={tacheId} style={{ marginBottom: '16px' }}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            marginBottom: '10px',
-                            paddingBottom: '6px',
-                            borderBottom: '1px solid rgba(192, 132, 252, 0.2)'
-                          }}>
-                            <span style={{
-                              background: 'rgba(192, 132, 252, 0.3)',
-                              color: '#c084fc',
-                              padding: '2px 8px',
-                              borderRadius: '4px',
-                              fontSize: '11px',
-                              fontWeight: 600
-                            }}>{tacheId}</span>
-                            <span style={{ color: '#94a3b8', fontSize: '12px' }}>
-                              {currentPole.taches.find(t => t.id === tacheId)?.nom}
-                            </span>
-                          </div>
-                          {resultats.map((resultat, idx) => (
-                            <div key={idx} style={{ 
-                              display: 'flex', 
-                              alignItems: 'flex-start', 
-                              gap: '10px',
-                              marginBottom: '8px',
-                              marginLeft: '8px'
-                            }}>
-                              <span style={{
-                                width: '16px',
-                                height: '16px',
-                                background: 'rgba(192, 132, 252, 0.2)',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '8px',
-                                color: '#c084fc',
-                                flexShrink: 0
-                              }}>✓</span>
-                              <span style={{ color: '#e2e8f0', fontSize: '13px' }}>{resultat}</span>
-                            </div>
-                          ))}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Compétences mobilisées */}
-              {availableCompetences.length > 0 && (
-                <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ 
-                    color: '#fbbf24', 
-                    fontSize: '14px', 
-                    fontWeight: 600, 
-                    marginBottom: '16px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    <span>⚡</span> Compétences mobilisées
-                  </h3>
-                  {availableCompetences.map(comp => (
-                    <div key={comp.id} style={{
-                      background: 'rgba(251, 191, 36, 0.1)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      marginBottom: '12px'
-                    }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '10px',
-                        marginBottom: '12px'
-                      }}>
-                        <span style={{
-                          background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                          color: '#0f172a',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          fontWeight: 700,
-                          fontSize: '12px'
-                        }}>{comp.id}</span>
-                        <span style={{ color: '#e2e8f0', fontWeight: 500 }}>{comp.nom}</span>
-                      </div>
-
-                      {/* Connaissances associées */}
-                      <div style={{ marginBottom: '12px' }}>
-                        <span style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          Connaissances associées :
-                        </span>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
-                          {comp.connaissances.map((conn, idx) => (
-                            <span key={idx} style={{
-                              background: 'rgba(30, 41, 59, 0.6)',
-                              padding: '4px 10px',
-                              borderRadius: '6px',
-                              fontSize: '12px',
-                              color: '#e2e8f0',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px'
-                            }}>
-                              {conn.nom}
-                              <span className={`tag niveau-${conn.niveau}`} style={{ padding: '2px 6px', fontSize: '10px' }}>
-                                N{conn.niveau}
-                              </span>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Critères d'évaluation */}
-                      <div>
-                        <span style={{ color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          Critères d'évaluation :
-                        </span>
-                        <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
-                          {comp.criteres.map((critere, idx) => (
-                            <li key={idx} style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '4px' }}>
-                              {critere}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Mode Édition - Fiche de séance */}
-              <div style={{ 
-                marginBottom: '24px',
-                padding: '20px',
-                background: 'rgba(16, 185, 129, 0.1)',
-                borderRadius: '12px',
-                border: '1px solid rgba(16, 185, 129, 0.3)'
-              }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  marginBottom: '16px'
-                }}>
-                  <h3 style={{ 
-                    color: '#10b981', 
-                    fontSize: '14px', 
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    <span>✏️</span> Mode Édition - Fiche de séance
-                  </h3>
-                  <button
-                    onClick={() => setEditMode(!editMode)}
-                    style={{
-                      background: editMode ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                      border: `1px solid ${editMode ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`,
-                      borderRadius: '8px',
-                      color: editMode ? '#ef4444' : '#10b981',
-                      padding: '8px 16px',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: 600
-                    }}
-                  >
-                    {editMode ? '✕ Fermer l\'édition' : '✎ Ouvrir l\'édition'}
-                  </button>
-                </div>
-
-                {editMode && (
-                  <div>
-                    {/* Numéro et Titre de la séance */}
-                    <div style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: '150px 1fr', 
-                      gap: '16px',
-                      marginBottom: '20px'
-                    }}>
-                      <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#94a3b8', 
-                          fontSize: '12px', 
-                          marginBottom: '6px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px'
-                        }}>N° Séance</label>
-                        <input
-                          type="text"
-                          value={seanceNumero}
-                          onChange={(e) => setSeanceNumero(e.target.value)}
-                          placeholder="Ex: 1, 2.1..."
-                          style={{
-                            width: '100%',
-                            padding: '10px 12px',
-                            background: 'rgba(30, 41, 59, 0.8)',
-                            border: '1px solid rgba(148, 163, 184, 0.2)',
-                            borderRadius: '8px',
-                            color: '#e2e8f0',
-                            fontSize: '14px'
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label style={{ 
-                          display: 'block', 
-                          color: '#94a3b8', 
-                          fontSize: '12px', 
-                          marginBottom: '6px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px'
-                        }}>Titre de la séance</label>
-                        <input
-                          type="text"
-                          value={seanceTitre}
-                          onChange={(e) => setSeanceTitre(e.target.value)}
-                          placeholder="Ex: Analyse d'un dossier de consultation..."
-                          style={{
-                            width: '100%',
-                            padding: '10px 12px',
-                            background: 'rgba(30, 41, 59, 0.8)',
-                            border: '1px solid rgba(148, 163, 184, 0.2)',
-                            borderRadius: '8px',
-                            color: '#e2e8f0',
-                            fontSize: '14px'
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* ON DONNE - Ressources documentaires */}
-                    <div style={{ marginBottom: '20px' }}>
-                      <h4 style={{ 
-                        color: '#60a5fa', 
-                        fontSize: '13px', 
-                        fontWeight: 600, 
-                        marginBottom: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        <span>📄</span> ON DONNE (cocher les documents fournis)
-                      </h4>
-                      <div style={{
-                        background: 'rgba(30, 41, 59, 0.5)',
-                        borderRadius: '8px',
-                        padding: '12px',
-                        maxHeight: '500px',
-                        overflowY: 'auto'
-                      }}>
-                        {Object.entries(ressourcesDocumentaires).map(([category, items]) => (
-                          <div key={category} style={{ 
-                            marginBottom: '12px',
-                            border: '1px solid rgba(148, 163, 184, 0.2)',
-                            borderRadius: '8px',
-                            overflow: 'hidden'
-                          }}>
-                            {/* En-tête de catégorie */}
-                            <div 
-                              onClick={() => toggleCategory(category)}
-                              style={{ 
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '10px 12px',
-                                background: 'rgba(96, 165, 250, 0.15)',
-                                cursor: 'pointer',
-                                userSelect: 'none'
-                              }}
-                            >
-                              <span style={{ 
-                                color: '#60a5fa', 
-                                fontWeight: 600, 
-                                fontSize: '12px'
-                              }}>
-                                {expandedCategories[category] ? '▼' : '▶'} {category}
-                              </span>
-                              <span style={{
-                                color: '#94a3b8',
-                                fontSize: '11px'
-                              }}>
-                                {Object.entries(onDonne).filter(([k, v]) => k.startsWith(category) && v).length} sélectionné(s)
-                              </span>
-                            </div>
-                            
-                            {/* Contenu de la catégorie */}
-                            {expandedCategories[category] && (
-                              <div style={{ padding: '12px' }}>
-                                {renderCategoryItems(items, category)}
-                                
-                                {/* Champs personnalisés */}
-                                {(customFields[category] || []).map(field => (
-                                  <div key={field.id} style={{ 
-                                    marginBottom: '10px',
-                                    padding: '10px',
-                                    background: 'rgba(16, 185, 129, 0.1)',
-                                    borderRadius: '6px',
-                                    border: '1px solid rgba(16, 185, 129, 0.3)'
-                                  }}>
-                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                                      <input
-                                        type="checkbox"
-                                        checked={onDonne[`${category}::custom::${field.id}`] || false}
-                                        onChange={() => toggleOnDonne(`${category}::custom::${field.id}`)}
-                                        style={{ width: '16px', height: '16px', accentColor: '#10b981' }}
-                                      />
-                                      <input
-                                        type="text"
-                                        value={field.nom}
-                                        onChange={(e) => updateCustomField(category, field.id, 'nom', e.target.value)}
-                                        placeholder="Nom du document personnalisé..."
-                                        style={{
-                                          flex: 1,
-                                          padding: '6px 10px',
-                                          background: 'rgba(30, 41, 59, 0.8)',
-                                          border: '1px solid rgba(16, 185, 129, 0.3)',
-                                          borderRadius: '4px',
-                                          color: '#e2e8f0',
-                                          fontSize: '12px'
-                                        }}
-                                      />
-                                      <button
-                                        onClick={() => removeCustomField(category, field.id)}
-                                        style={{
-                                          background: 'rgba(239, 68, 68, 0.2)',
-                                          border: '1px solid rgba(239, 68, 68, 0.3)',
-                                          borderRadius: '4px',
-                                          color: '#ef4444',
-                                          padding: '4px 8px',
-                                          cursor: 'pointer',
-                                          fontSize: '11px'
-                                        }}
-                                      >
-                                        ✕
-                                      </button>
-                                    </div>
-                                    {onDonne[`${category}::custom::${field.id}`] && (
-                                      <input
-                                        type="text"
-                                        value={field.detail}
-                                        onChange={(e) => updateCustomField(category, field.id, 'detail', e.target.value)}
-                                        placeholder="Précisions..."
-                                        style={{
-                                          width: 'calc(100% - 24px)',
-                                          marginLeft: '24px',
-                                          padding: '6px 10px',
-                                          background: 'rgba(30, 41, 59, 0.8)',
-                                          border: '1px solid rgba(16, 185, 129, 0.3)',
-                                          borderRadius: '4px',
-                                          color: '#e2e8f0',
-                                          fontSize: '11px'
-                                        }}
-                                      />
-                                    )}
-                                  </div>
-                                ))}
-                                
-                                {/* Bouton ajouter champ personnalisé */}
-                                <button
-                                  onClick={() => addCustomField(category)}
-                                  style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    marginTop: '8px',
-                                    background: 'rgba(16, 185, 129, 0.1)',
-                                    border: '1px dashed rgba(16, 185, 129, 0.4)',
-                                    borderRadius: '6px',
-                                    color: '#10b981',
-                                    cursor: 'pointer',
-                                    fontSize: '12px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '6px'
-                                  }}
-                                >
-                                  <span>+</span> Ajouter un document personnalisé
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* ON DEMANDE */}
-                    <div style={{ marginBottom: '20px' }}>
-                      <h4 style={{ 
-                        color: '#f59e0b', 
-                        fontSize: '13px', 
-                        fontWeight: 600, 
-                        marginBottom: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        <span>❓</span> ON DEMANDE (travail à réaliser par l'étudiant)
-                      </h4>
-                      <textarea
-                        value={onDemande}
-                        onChange={(e) => setOnDemande(e.target.value)}
-                        placeholder={"Décrire le travail demandé à l'étudiant...\n\nExemple :\n- Analyser le CCTP et identifier les exigences\n- Proposer une solution technique pour...\n- Réaliser un croquis de..."}
-                        style={{
-                          width: '100%',
-                          minHeight: '150px',
-                          padding: '12px',
-                          background: 'rgba(30, 41, 59, 0.8)',
-                          border: '1px solid rgba(245, 158, 11, 0.3)',
-                          borderRadius: '8px',
-                          color: '#e2e8f0',
-                          fontSize: '13px',
-                          resize: 'vertical',
-                          lineHeight: '1.5'
-                        }}
-                      />
-                    </div>
-
-                    {/* SAVOIRS ASSOCIÉS */}
-                    <div style={{ marginBottom: '20px' }}>
-                      <h4 style={{ 
-                        color: '#4ade80', 
-                        fontSize: '13px', 
-                        fontWeight: 600, 
-                        marginBottom: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        <span>📚</span> SAVOIRS ASSOCIÉS (sélectionner pour inclure dans la fiche)
-                      </h4>
-                      <div style={{
-                        background: 'rgba(30, 41, 59, 0.5)',
-                        borderRadius: '8px',
-                        padding: '12px',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(2, 1fr)',
-                        gap: '8px'
-                      }}>
-                        {connaissancesGlobales.map(savoir => {
-                          const isLinked = availableCompetences.some(comp => savoir.competences.includes(comp.id));
-                          return (
-                            <label 
-                              key={savoir.id}
-                              style={{ 
-                                display: 'flex', 
-                                alignItems: 'flex-start', 
-                                gap: '8px',
-                                cursor: 'pointer',
-                                padding: '8px',
-                                borderRadius: '6px',
-                                background: selectedSavoirs[savoir.id] 
-                                  ? 'rgba(74, 222, 128, 0.15)' 
-                                  : isLinked 
-                                    ? 'rgba(74, 222, 128, 0.05)' 
-                                    : 'transparent',
-                                border: selectedSavoirs[savoir.id] 
-                                  ? '1px solid rgba(74, 222, 128, 0.4)' 
-                                  : isLinked 
-                                    ? '1px solid rgba(74, 222, 128, 0.2)' 
-                                    : '1px solid transparent',
-                                opacity: isLinked ? 1 : 0.5,
-                                transition: 'all 0.2s ease'
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedSavoirs[savoir.id] || false}
-                                onChange={() => setSelectedSavoirs(prev => ({
-                                  ...prev,
-                                  [savoir.id]: !prev[savoir.id]
-                                }))}
-                                style={{ 
-                                  width: '16px', 
-                                  height: '16px', 
-                                  marginTop: '2px',
-                                  accentColor: '#4ade80'
-                                }}
-                              />
-                              <div>
-                                <span style={{ 
-                                  color: isLinked ? '#4ade80' : '#94a3b8', 
-                                  fontWeight: 600,
-                                  fontSize: '11px',
-                                  marginRight: '6px'
-                                }}>
-                                  {savoir.id}.
-                                </span>
-                                <span style={{ 
-                                  color: '#e2e8f0', 
-                                  fontSize: '12px' 
-                                }}>
-                                  {savoir.nom}
-                                </span>
-                                {isLinked && (
-                                  <span style={{
-                                    marginLeft: '6px',
-                                    background: 'rgba(74, 222, 128, 0.2)',
-                                    color: '#4ade80',
-                                    padding: '1px 5px',
-                                    borderRadius: '3px',
-                                    fontSize: '9px'
-                                  }}>
-                                    lié
-                                  </span>
-                                )}
-                              </div>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Bouton Export PDF */}
-                    <div style={{ 
-                      display: 'flex', 
-                      justifyContent: 'center',
-                      paddingTop: '16px',
-                      borderTop: '1px solid rgba(148, 163, 184, 0.2)'
-                    }}>
-                      <button
-                        onClick={exportToPDF}
-                        style={{
-                          background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                          border: 'none',
-                          borderRadius: '10px',
-                          color: 'white',
-                          padding: '14px 32px',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px)';
-                          e.target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
-                        }}
-                      >
-                        <span style={{ fontSize: '18px' }}>📥</span>
-                        Exporter en PDF
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Connaissances globales liées */}
-              {availableCompetences.length > 0 && (
-                <div>
-                  <h3 style={{ 
-                    color: '#4ade80', 
-                    fontSize: '14px', 
-                    fontWeight: 600, 
-                    marginBottom: '16px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}>
-                    <span>📚</span> Savoirs associés (connaissances globales)
-                  </h3>
-                  <div style={{
-                    background: 'rgba(34, 197, 94, 0.1)',
-                    borderRadius: '12px',
-                    padding: '16px'
-                  }}>
-                    {connaissancesGlobales
-                      .filter(conn => availableCompetences.some(comp => conn.competences.includes(comp.id)))
-                      .map(conn => (
-                        <div key={conn.id} style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          marginBottom: '10px',
-                          padding: '8px 12px',
-                          background: 'rgba(30, 41, 59, 0.4)',
-                          borderRadius: '8px'
-                        }}>
-                          <span style={{
-                            color: '#4ade80',
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: '12px',
-                            fontWeight: 600
-                          }}>{conn.id}</span>
-                          <span style={{ color: '#e2e8f0', fontSize: '14px' }}>{conn.nom}</span>
-                          <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
-                            {availableCompetences
-                              .filter(comp => conn.competences.includes(comp.id))
-                              .map(comp => (
-                                <span key={comp.id} style={{
-                                  background: 'rgba(251, 191, 36, 0.3)',
-                                  color: '#fbbf24',
-                                  padding: '2px 6px',
-                                  borderRadius: '4px',
-                                  fontSize: '10px',
-                                  fontWeight: 600
-                                }}>{comp.id}</span>
-                              ))
-                            }
-                          </div>
-                        </div>
-                      ))
-                    }
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Results */}
-        <div className="glass-card" style={{ padding: '32px' }}>
-          <h2 style={{ 
-            fontSize: '1rem', 
-            fontWeight: 600, 
-            marginBottom: '24px',
-            color: '#fbbf24',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <span style={{ 
-              width: '8px', 
-              height: '8px', 
-              background: '#fbbf24', 
-              borderRadius: '2px' 
-            }} />
-            Résultats
-          </h2>
-
-          {viewMode === 'connaissances' ? (
-            /* Tableau Croisé Connaissances-Compétences */
-            <div className="animate-in" style={{ overflowX: 'auto' }}>
+        {/* TABLEAU TÂCHES / COMPÉTENCES */}
+        {viewMode === 'tableau' && (
+          <div className="glass-card" style={{ padding: '32px', marginTop: '24px' }}>
+            <h2 style={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 700, 
+              color: '#fbbf24',
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '22px' }}>▦</span>
+              Tableau croisé Tâches / Compétences
+            </h2>
+            <div style={{ overflowX: 'auto' }}>
               <table style={{ 
                 width: '100%', 
                 borderCollapse: 'collapse',
@@ -2783,9 +2132,9 @@ function FormulaireBTSEBCR() {
                       position: 'sticky',
                       left: 0,
                       zIndex: 2,
-                      minWidth: '250px'
+                      minWidth: '200px'
                     }}>
-                      Connaissances
+                      Tâches professionnelles
                     </th>
                     {data.blocs.map(bloc => (
                       <th 
@@ -2799,7 +2148,167 @@ function FormulaireBTSEBCR() {
                           borderLeft: '2px solid rgba(148, 163, 184, 0.3)'
                         }}
                       >
-                        <div style={{ fontWeight: 600, marginBottom: '4px', fontSize: '11px' }}>{bloc.id} - {bloc.nom}</div>
+                        <div style={{ fontWeight: 600, fontSize: '11px' }}>Bloc {bloc.id} - {bloc.nom}</div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th style={{ 
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      padding: '8px',
+                      borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2
+                    }}></th>
+                    {data.blocs.flatMap(bloc => 
+                      bloc.competences.map((comp, idx) => (
+                        <th 
+                          key={comp.id}
+                          style={{ 
+                            background: 'rgba(30, 41, 59, 0.6)',
+                            padding: '8px 4px',
+                            textAlign: 'center',
+                            borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                            borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)',
+                            minWidth: '45px'
+                          }}
+                          title={comp.nom}
+                        >
+                          <span style={{ 
+                            color: '#fbbf24', 
+                            fontWeight: 700,
+                            fontSize: '11px'
+                          }}>
+                            {comp.id}
+                          </span>
+                        </th>
+                      ))
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.blocs.map(bloc => (
+                    <React.Fragment key={bloc.id}>
+                      {bloc.poles.map(pole => (
+                        <React.Fragment key={pole.id}>
+                          <tr>
+                            <td 
+                              colSpan={1 + data.blocs.reduce((acc, b) => acc + b.competences.length, 0)}
+                              style={{
+                                background: 'rgba(167, 139, 250, 0.15)',
+                                padding: '8px 12px',
+                                fontWeight: 600,
+                                color: '#a78bfa',
+                                fontSize: '11px'
+                              }}
+                            >
+                              {pole.id} — {pole.nom}
+                            </td>
+                          </tr>
+                          {pole.taches.map(tache => (
+                            <tr key={tache.id}>
+                              <td style={{
+                                background: 'rgba(30, 41, 59, 0.4)',
+                                padding: '8px 12px',
+                                borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                                position: 'sticky',
+                                left: 0,
+                                zIndex: 1,
+                                fontSize: '11px'
+                              }}>
+                                <span style={{ color: '#ec4899', fontWeight: 600, marginRight: '8px' }}>{tache.id}</span>
+                                <span style={{ color: '#e2e8f0' }}>{tache.nom}</span>
+                              </td>
+                              {data.blocs.flatMap(b => 
+                                b.competences.map((comp, idx) => (
+                                  <td 
+                                    key={comp.id}
+                                    style={{
+                                      textAlign: 'center',
+                                      padding: '8px',
+                                      borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                                      borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)'
+                                    }}
+                                  >
+                                    {tache.competences?.includes(comp.id) && (
+                                      <span style={{ 
+                                        display: 'inline-block',
+                                        width: '20px',
+                                        height: '20px',
+                                        background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+                                        borderRadius: '4px',
+                                        color: '#0f172a',
+                                        fontWeight: 700,
+                                        fontSize: '12px',
+                                        lineHeight: '20px'
+                                      }}>
+                                        ✓
+                                      </span>
+                                    )}
+                                  </td>
+                                ))
+                              )}
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TABLEAU CONNAISSANCES / COMPÉTENCES */}
+        {viewMode === 'connaissances' && (
+          <div className="glass-card" style={{ padding: '32px', marginTop: '24px' }}>
+            <h2 style={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 700, 
+              color: '#4ade80',
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '22px' }}>▤</span>
+              Tableau croisé Connaissances / Compétences
+            </h2>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ 
+                width: '100%', 
+                borderCollapse: 'collapse',
+                fontSize: '12px'
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{ 
+                      background: 'rgba(30, 41, 59, 0.8)',
+                      padding: '12px 8px',
+                      textAlign: 'left',
+                      borderBottom: '2px solid #4ade80',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2,
+                      minWidth: '250px'
+                    }}>
+                      Connaissances globales
+                    </th>
+                    {data.blocs.map(bloc => (
+                      <th 
+                        key={bloc.id} 
+                        colSpan={bloc.competences.length}
+                        style={{ 
+                          background: 'rgba(74, 222, 128, 0.2)',
+                          padding: '8px',
+                          textAlign: 'center',
+                          borderBottom: '2px solid #4ade80',
+                          borderLeft: '2px solid rgba(148, 163, 184, 0.3)'
+                        }}
+                      >
+                        <div style={{ fontWeight: 600, fontSize: '11px' }}>Bloc {bloc.id} - {bloc.nom}</div>
                       </th>
                     ))}
                   </tr>
@@ -2842,7 +2351,7 @@ function FormulaireBTSEBCR() {
                   {connaissancesGlobales.map(conn => (
                     <tr key={conn.id}>
                       <td style={{ 
-                        background: 'rgba(15, 23, 42, 0.6)',
+                        background: 'rgba(30, 41, 59, 0.4)',
                         padding: '10px 12px',
                         borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
                         position: 'sticky',
@@ -2850,320 +2359,1040 @@ function FormulaireBTSEBCR() {
                         zIndex: 1
                       }}>
                         <span style={{ 
-                          color: '#60a5fa',
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: '11px',
+                          color: '#4ade80', 
+                          fontWeight: 600, 
                           marginRight: '10px',
-                          fontWeight: 600
+                          fontFamily: "'JetBrains Mono', monospace"
                         }}>
                           {conn.id}
                         </span>
-                        <span style={{ color: '#e2e8f0', fontSize: '13px' }}>{conn.nom}</span>
+                        <span style={{ color: '#e2e8f0' }}>{conn.nom}</span>
                       </td>
                       {data.blocs.flatMap(bloc => 
-                        bloc.competences.map((comp, idx) => (
-                          <td 
-                            key={`${conn.id}-${comp.id}`}
-                            style={{ 
-                              background: 'rgba(15, 23, 42, 0.4)',
-                              padding: '8px',
-                              textAlign: 'center',
-                              borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
-                              borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)'
-                            }}
-                          >
-                            {conn.competences.includes(comp.id) && (
-                              <span style={{ 
-                                display: 'inline-block',
-                                width: '18px',
-                                height: '18px',
-                                background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-                                borderRadius: '4px',
-                                color: '#fff',
-                                fontWeight: 700,
-                                fontSize: '11px',
-                                lineHeight: '18px'
-                              }}>
-                                ✕
-                              </span>
-                            )}
-                          </td>
-                        ))
+                        bloc.competences.map((comp, idx) => {
+                          const isLinked = conn.competences.includes(comp.id);
+                          const niveau = isLinked ? comp.connaissances.find(c => c.nom === conn.nom)?.niveau : null;
+                          return (
+                            <td 
+                              key={comp.id}
+                              style={{
+                                textAlign: 'center',
+                                padding: '8px',
+                                borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                                borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)',
+                                background: isLinked ? 'rgba(74, 222, 128, 0.1)' : 'transparent'
+                              }}
+                            >
+                              {isLinked && (
+                                <span style={{ 
+                                  display: 'inline-block',
+                                  minWidth: '24px',
+                                  padding: '2px 6px',
+                                  background: niveau ? `rgba(${niveau === 4 ? '251, 191, 36' : niveau === 3 ? '168, 85, 247' : niveau === 2 ? '59, 130, 246' : '34, 197, 94'}, 0.3)` : 'rgba(74, 222, 128, 0.3)',
+                                  borderRadius: '4px',
+                                  color: niveau ? (niveau === 4 ? '#fbbf24' : niveau === 3 ? '#c084fc' : niveau === 2 ? '#60a5fa' : '#4ade80') : '#4ade80',
+                                  fontWeight: 700,
+                                  fontSize: '10px'
+                                }}>
+                                  {niveau ? `N${niveau}` : '✓'}
+                                </span>
+                              )}
+                            </td>
+                          );
+                        })
                       )}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          ) : viewMode === 'tableau' ? (
-            /* Tableau Croisé View */
-            <div className="animate-in" style={{ overflowX: 'auto' }}>
-              <table style={{ 
-                width: '100%', 
-                borderCollapse: 'collapse',
-                fontSize: '12px'
+          </div>
+        )}
+
+
+        {/* RÉCAPITULATIF DU CONTEXTE (visible si tous les filtres sont renseignés) */}
+        {selectedBloc && selectedPole && selectedTache && selectedCompetence && (
+          <div className="glass-card" style={{ padding: '32px', marginTop: '24px' }}>
+            <h2 style={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 700, 
+              color: '#60a5fa',
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '22px' }}>📋</span>
+              Récapitulatif du contexte sélectionné
+            </h2>
+
+            {/* Bloc et Unité */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(2, 1fr)', 
+              gap: '16px',
+              marginBottom: '20px'
+            }}>
+              <div style={{
+                background: 'rgba(251, 191, 36, 0.1)',
+                border: '1px solid rgba(251, 191, 36, 0.3)',
+                borderRadius: '10px',
+                padding: '16px'
               }}>
-                <thead>
-                  <tr>
-                    <th style={{ 
-                      background: 'rgba(30, 41, 59, 0.8)',
-                      padding: '12px 8px',
-                      textAlign: 'left',
-                      borderBottom: '2px solid #fbbf24',
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 2,
-                      minWidth: '200px'
-                    }}>
-                      Activités / Tâches
-                    </th>
-                    {data.blocs.map(bloc => (
-                      <th 
-                        key={bloc.id} 
-                        colSpan={bloc.competences.length}
-                        style={{ 
-                          background: 'rgba(251, 191, 36, 0.2)',
-                          padding: '8px',
-                          textAlign: 'center',
-                          borderBottom: '2px solid #fbbf24',
-                          borderLeft: '2px solid rgba(148, 163, 184, 0.3)'
-                        }}
-                      >
-                        <div style={{ fontWeight: 600, marginBottom: '4px' }}>{bloc.id} - {bloc.nom}</div>
-                        <div style={{ fontSize: '10px', color: '#94a3b8' }}>{bloc.unite}</div>
-                      </th>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th style={{ 
-                      background: 'rgba(30, 41, 59, 0.8)',
-                      padding: '8px',
-                      borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 2
-                    }}></th>
-                    {data.blocs.flatMap(bloc => 
-                      bloc.competences.map((comp, idx) => (
-                        <th 
-                          key={comp.id}
-                          style={{ 
-                            background: 'rgba(30, 41, 59, 0.6)',
-                            padding: '8px 4px',
-                            textAlign: 'center',
-                            borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
-                            borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)',
-                            minWidth: '50px',
-                            writingMode: 'vertical-rl',
-                            textOrientation: 'mixed',
-                            height: '120px',
-                            fontSize: '10px',
-                            color: '#94a3b8'
-                          }}
-                          title={comp.nom}
-                        >
-                          <div style={{ 
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            alignItems: 'center',
-                            gap: '4px'
-                          }}>
-                            <span style={{ 
-                              color: '#fbbf24', 
-                              fontWeight: 700,
-                              writingMode: 'horizontal-tb'
-                            }}>
-                              {comp.id}
-                            </span>
-                            <span style={{ 
-                              maxHeight: '100px',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis'
-                            }}>
-                              {comp.nom.length > 40 ? comp.nom.substring(0, 40) + '...' : comp.nom}
-                            </span>
-                          </div>
-                        </th>
-                      ))
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.blocs.map(bloc => (
-                    <React.Fragment key={bloc.id}>
-                      {bloc.poles.map((pole, poleIdx) => (
-                        <React.Fragment key={pole.id}>
-                          {/* Pole header row */}
-                          <tr>
-                            <td 
-                              colSpan={1 + data.blocs.reduce((sum, b) => sum + b.competences.length, 0)}
-                              style={{ 
-                                background: 'rgba(251, 191, 36, 0.1)',
-                                padding: '10px 12px',
-                                fontWeight: 600,
-                                color: '#fbbf24',
-                                borderTop: poleIdx === 0 ? '2px solid rgba(251, 191, 36, 0.5)' : 'none'
-                              }}
-                            >
-                              <span style={{ fontFamily: "'JetBrains Mono', monospace", marginRight: '8px' }}>
-                                {pole.id}
-                              </span>
-                              {pole.nom}
-                            </td>
-                          </tr>
-                          {/* Taches rows */}
-                          {pole.taches.map(tache => (
-                            <tr key={tache.id}>
-                              <td style={{ 
-                                background: 'rgba(15, 23, 42, 0.6)',
-                                padding: '8px 12px',
-                                borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
-                                position: 'sticky',
-                                left: 0,
-                                zIndex: 1
-                              }}>
-                                <span style={{ 
-                                  color: '#c084fc',
-                                  fontFamily: "'JetBrains Mono', monospace",
-                                  fontSize: '11px',
-                                  marginRight: '8px'
-                                }}>
-                                  {tache.id}
-                                </span>
-                                <span style={{ color: '#e2e8f0' }}>{tache.nom}</span>
-                              </td>
-                              {data.blocs.flatMap(b => 
-                                b.competences.map((comp, idx) => (
-                                  <td 
-                                    key={`${tache.id}-${comp.id}`}
-                                    style={{ 
-                                      background: 'rgba(15, 23, 42, 0.4)',
-                                      padding: '8px',
-                                      textAlign: 'center',
-                                      borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
-                                      borderLeft: idx === 0 ? '2px solid rgba(148, 163, 184, 0.3)' : '1px solid rgba(148, 163, 184, 0.1)'
-                                    }}
-                                  >
-                                    {tache.competences?.includes(comp.id) && (
-                                      <span style={{ 
-                                        display: 'inline-block',
-                                        width: '20px',
-                                        height: '20px',
-                                        background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                                        borderRadius: '4px',
-                                        color: '#0f172a',
-                                        fontWeight: 700,
-                                        fontSize: '12px',
-                                        lineHeight: '20px'
-                                      }}>
-                                        ✕
-                                      </span>
-                                    )}
-                                  </td>
-                                ))
-                              )}
-                            </tr>
-                          ))}
-                        </React.Fragment>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            /* Competences View */
-            <div>
-              {!selectedBloc ? (
-                <div className="empty-state">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                  </svg>
-                  <p style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Sélectionnez un bloc</p>
-                  <p style={{ fontSize: '14px' }}>pour afficher les compétences associées</p>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                  Bloc de compétences
                 </div>
-              ) : (
-                <div>
-                  {(selectedCompetence ? currentBloc?.competences.filter(c => c.id === selectedCompetence) : currentBloc?.competences)?.map(comp => (
-                    <div key={comp.id} className="result-card animate-in">
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '12px',
-                        marginBottom: '16px'
+                <div style={{ color: '#fbbf24', fontWeight: 600, fontSize: '14px' }}>
+                  {currentBloc?.nom}
+                </div>
+                <div style={{ color: '#94a3b8', fontSize: '12px', marginTop: '4px' }}>
+                  Unité {currentBloc?.unite}
+                </div>
+              </div>
+
+              <div style={{
+                background: 'rgba(167, 139, 250, 0.1)',
+                border: '1px solid rgba(167, 139, 250, 0.3)',
+                borderRadius: '10px',
+                padding: '16px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                  Pôle d'activités
+                </div>
+                <div style={{ color: '#a78bfa', fontWeight: 600, fontSize: '14px' }}>
+                  {selectedPole} — {currentPole?.nom}
+                </div>
+                <div style={{ color: '#94a3b8', fontSize: '12px', marginTop: '4px' }}>
+                  Autonomie : {currentPole?.conditionsExercice?.autonomie || 'Non spécifiée'}
+                </div>
+              </div>
+            </div>
+
+            {/* Tâche et Compétence */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(2, 1fr)', 
+              gap: '16px',
+              marginBottom: '20px'
+            }}>
+              <div style={{
+                background: 'rgba(236, 72, 153, 0.1)',
+                border: '1px solid rgba(236, 72, 153, 0.3)',
+                borderRadius: '10px',
+                padding: '16px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                  Tâche professionnelle
+                </div>
+                <div style={{ color: '#ec4899', fontWeight: 600, fontSize: '14px' }}>
+                  {selectedTache} — {currentTache?.nom}
+                </div>
+              </div>
+
+              <div style={{
+                background: 'rgba(251, 191, 36, 0.1)',
+                border: '1px solid rgba(251, 191, 36, 0.3)',
+                borderRadius: '10px',
+                padding: '16px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                  Compétence visée
+                </div>
+                <div style={{ color: '#fbbf24', fontWeight: 600, fontSize: '14px' }}>
+                  {selectedCompetence} — {currentCompetence?.nom}
+                </div>
+              </div>
+            </div>
+
+            {/* Connaissances associées à la compétence */}
+            {currentCompetence?.connaissances && currentCompetence.connaissances.length > 0 && (
+              <div style={{
+                background: 'rgba(74, 222, 128, 0.1)',
+                border: '1px solid rgba(74, 222, 128, 0.3)',
+                borderRadius: '10px',
+                padding: '16px',
+                marginBottom: '20px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                  📚 Connaissances associées à la compétence
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  {currentCompetence.connaissances.map((conn, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: 'rgba(30, 41, 59, 0.6)',
+                      padding: '8px 12px',
+                      borderRadius: '8px'
+                    }}>
+                      <span style={{ color: '#4ade80', fontSize: '13px' }}>{conn.nom}</span>
+                      <span style={{
+                        background: `rgba(${conn.niveau === 4 ? '239, 68, 68' : conn.niveau === 3 ? '251, 191, 36' : conn.niveau === 2 ? '96, 165, 250' : '74, 222, 128'}, 0.3)`,
+                        color: conn.niveau === 4 ? '#ef4444' : conn.niveau === 3 ? '#fbbf24' : conn.niveau === 2 ? '#60a5fa' : '#4ade80',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        fontSize: '10px',
+                        fontWeight: 600
                       }}>
-                        <span style={{ 
-                          background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                          color: '#0f172a',
-                          padding: '6px 12px',
-                          borderRadius: '8px',
-                          fontWeight: 700,
-                          fontFamily: "'JetBrains Mono', monospace"
-                        }}>
-                          {comp.id}
-                        </span>
-                        <h4 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
-                          {comp.nom}
-                        </h4>
-                      </div>
-
-                      {/* Connaissances */}
-                      <div style={{ marginBottom: '20px' }}>
-                        <h5 style={{ 
-                          fontSize: '12px', 
-                          color: '#94a3b8', 
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px',
-                          marginBottom: '12px'
-                        }}>
-                          Connaissances associées
-                        </h5>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                          {comp.connaissances.map((conn, i) => (
-                            <div key={i} style={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              gap: '8px',
-                              background: 'rgba(30, 41, 59, 0.6)',
-                              padding: '8px 12px',
-                              borderRadius: '8px'
-                            }}>
-                              <span style={{ fontSize: '13px', color: '#e2e8f0' }}>{conn.nom}</span>
-                              <span className={`tag niveau-${conn.niveau}`} style={{ padding: '2px 8px', fontSize: '10px' }}>
-                                N{conn.niveau}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Critères */}
-                      <div>
-                        <h5 style={{ 
-                          fontSize: '12px', 
-                          color: '#94a3b8', 
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px',
-                          marginBottom: '12px'
-                        }}>
-                          Critères d'évaluation
-                        </h5>
-                        {comp.criteres.map((critere, i) => (
-                          <div key={i} className="critere-item">
-                            <div className="critere-check">
-                              <span style={{ color: '#0f172a', fontSize: '12px' }}>✓</span>
-                            </div>
-                            <span style={{ fontSize: '14px', color: '#e2e8f0' }}>{critere}</span>
-                          </div>
-                        ))}
-                      </div>
+                        N{conn.niveau}
+                      </span>
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* Critères d'évaluation */}
+            {currentCompetence?.criteres && currentCompetence.criteres.length > 0 && (
+              <div style={{
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.3)',
+                borderRadius: '10px',
+                padding: '16px',
+                marginBottom: '20px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                  ✓ Critères d'évaluation de la compétence
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {currentCompetence.criteres.map((critere, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      padding: '8px 12px',
+                      background: 'rgba(30, 41, 59, 0.4)',
+                      borderRadius: '6px'
+                    }}>
+                      <span style={{
+                        color: '#06b6d4',
+                        fontSize: '14px',
+                        marginTop: '1px'
+                      }}>•</span>
+                      <span style={{ color: '#e2e8f0', fontSize: '13px', lineHeight: '1.4' }}>{critere}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Résultats attendus de la tâche */}
+            {currentPole?.resultatsAttendus?.[selectedTache] && (
+              <div style={{
+                background: 'rgba(245, 158, 11, 0.1)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                borderRadius: '10px',
+                padding: '16px',
+                marginBottom: '20px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                  🎯 Résultats attendus de la tâche {selectedTache} <span style={{ fontStyle: 'italic', textTransform: 'none', fontSize: '10px' }}>(formulés à l'indicatif)</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {currentPole.resultatsAttendus[selectedTache].map((resultat, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      padding: '8px 12px',
+                      background: 'rgba(30, 41, 59, 0.4)',
+                      borderRadius: '6px'
+                    }}>
+                      <span style={{
+                        color: '#f59e0b',
+                        fontSize: '14px',
+                        marginTop: '1px'
+                      }}>•</span>
+                      <span style={{ color: '#e2e8f0', fontSize: '13px', lineHeight: '1.4' }}>{transformerEnIndicatif(resultat)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Moyens / Ressources du pôle */}
+            {currentPole?.conditionsExercice?.moyens && currentPole.conditionsExercice.moyens.length > 0 && (
+              <div style={{
+                background: 'rgba(96, 165, 250, 0.1)',
+                border: '1px solid rgba(96, 165, 250, 0.3)',
+                borderRadius: '10px',
+                padding: '16px'
+              }}>
+                <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                  📂 Moyens et ressources disponibles (conditions d'exercice)
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {currentPole.conditionsExercice.moyens.map((moyen, i) => (
+                    <span key={i} style={{
+                      background: 'rgba(30, 41, 59, 0.6)',
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      color: '#60a5fa',
+                      fontSize: '12px'
+                    }}>
+                      {moyen}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* MODE ÉDITION - FICHE DE SÉANCE (en bas de page, visible si tous les filtres sont renseignés) */}
+        {selectedBloc && selectedPole && selectedTache && selectedCompetence && (
+          <div id="mode-edition-section" className="glass-card" style={{ padding: '32px', marginTop: '24px' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              marginBottom: '24px'
+            }}>
+              <h2 style={{ 
+                fontSize: '1.2rem', 
+                fontWeight: 700, 
+                color: '#10b981',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <span style={{ fontSize: '24px' }}>✏️</span>
+                Mode Édition - Fiche de séance
+              </h2>
+              <button
+                onClick={() => setEditMode(!editMode)}
+                style={{
+                  background: editMode ? 'rgba(239, 68, 68, 0.2)' : 'linear-gradient(135deg, #10b981, #059669)',
+                  border: editMode ? '1px solid rgba(239, 68, 68, 0.3)' : 'none',
+                  borderRadius: '10px',
+                  color: editMode ? '#ef4444' : '#fff',
+                  padding: '12px 24px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  boxShadow: editMode ? 'none' : '0 4px 15px rgba(16, 185, 129, 0.3)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {editMode ? '✕ Fermer l\'édition' : '✎ Créer ma fiche de séance'}
+              </button>
             </div>
-          )}
-        </div>
+
+            {!editMode && (
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.05)',
+                border: '1px dashed rgba(16, 185, 129, 0.3)',
+                borderRadius: '12px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <p style={{ color: '#94a3b8', fontSize: '14px' }}>
+                  Cliquez sur le bouton ci-dessus pour ouvrir l'éditeur de fiche de séance
+                </p>
+              </div>
+            )}
+
+            {editMode && (
+              <div>
+                {/* Numéro et Titre de la séance */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '150px 1fr', 
+                  gap: '16px',
+                  marginBottom: '24px'
+                }}>
+                  <div>
+                    <label style={{ 
+                      display: 'block', 
+                      color: '#94a3b8', 
+                      fontSize: '12px', 
+                      marginBottom: '6px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>N° Séance</label>
+                    <input
+                      type="text"
+                      value={seanceNumero}
+                      onChange={(e) => setSeanceNumero(e.target.value)}
+                      placeholder="Ex: 1, 2.1..."
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '1px solid rgba(148, 163, 184, 0.3)',
+                        borderRadius: '8px',
+                        color: '#e2e8f0',
+                        fontSize: '14px'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ 
+                      display: 'block', 
+                      color: '#94a3b8', 
+                      fontSize: '12px', 
+                      marginBottom: '6px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>Titre de la séance</label>
+                    <input
+                      type="text"
+                      value={seanceTitre}
+                      onChange={(e) => setSeanceTitre(e.target.value)}
+                      placeholder="Ex: Analyse du CCTP et des plans..."
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '1px solid rgba(148, 163, 184, 0.3)',
+                        borderRadius: '8px',
+                        color: '#e2e8f0',
+                        fontSize: '14px'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* ON DONNE */}
+                <div style={{ marginBottom: '24px' }}>
+                  <h4 style={{ 
+                    color: '#60a5fa', 
+                    fontSize: '14px', 
+                    fontWeight: 600, 
+                    marginBottom: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span>📂</span> ON DONNE (ressources documentaires)
+                  </h4>
+                  <div style={{
+                    background: 'rgba(30, 41, 59, 0.5)',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    maxHeight: '400px',
+                    overflowY: 'auto'
+                  }}>
+                    {Object.entries(ressourcesDocumentaires).map(([category, items]) => (
+                      <div key={category} style={{ 
+                        marginBottom: '12px',
+                        border: '1px solid rgba(148, 163, 184, 0.2)',
+                        borderRadius: '8px',
+                        overflow: 'hidden'
+                      }}>
+                        <div 
+                          onClick={() => toggleCategory(category)}
+                          style={{ 
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '12px 16px',
+                            background: 'rgba(96, 165, 250, 0.15)',
+                            cursor: 'pointer',
+                            userSelect: 'none'
+                          }}
+                        >
+                          <span style={{ 
+                            color: '#60a5fa', 
+                            fontWeight: 600, 
+                            fontSize: '13px'
+                          }}>
+                            {expandedCategories[category] ? '▼' : '▶'} {category}
+                          </span>
+                          <span style={{
+                            color: '#94a3b8',
+                            fontSize: '12px'
+                          }}>
+                            {Object.entries(onDonne).filter(([k, v]) => k.startsWith(category) && v).length} sélectionné(s)
+                          </span>
+                        </div>
+                        
+                        {expandedCategories[category] && (
+                          <div style={{ padding: '12px' }}>
+                            {renderCategoryItems(items, category)}
+                            
+                            {(customFields[category] || []).map(field => (
+                              <div key={field.id} style={{ 
+                                marginBottom: '10px',
+                                padding: '10px',
+                                background: 'rgba(16, 185, 129, 0.1)',
+                                borderRadius: '6px',
+                                border: '1px solid rgba(16, 185, 129, 0.3)'
+                              }}>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={onDonne[`${category}::custom::${field.id}`] || false}
+                                    onChange={() => toggleOnDonne(`${category}::custom::${field.id}`)}
+                                    style={{ width: '16px', height: '16px', accentColor: '#10b981' }}
+                                  />
+                                  <input
+                                    type="text"
+                                    value={field.nom}
+                                    onChange={(e) => updateCustomField(category, field.id, 'nom', e.target.value)}
+                                    placeholder="Nom du document personnalisé..."
+                                    style={{
+                                      flex: 1,
+                                      padding: '8px 12px',
+                                      background: 'rgba(30, 41, 59, 0.8)',
+                                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                                      borderRadius: '6px',
+                                      color: '#e2e8f0',
+                                      fontSize: '13px'
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => removeCustomField(category, field.id)}
+                                    style={{
+                                      background: 'rgba(239, 68, 68, 0.2)',
+                                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                                      borderRadius: '6px',
+                                      color: '#ef4444',
+                                      padding: '6px 10px',
+                                      cursor: 'pointer',
+                                      fontSize: '12px'
+                                    }}
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                                {onDonne[`${category}::custom::${field.id}`] && (
+                                  <input
+                                    type="text"
+                                    value={field.detail}
+                                    onChange={(e) => updateCustomField(category, field.id, 'detail', e.target.value)}
+                                    placeholder="Précisions..."
+                                    style={{
+                                      width: 'calc(100% - 24px)',
+                                      marginLeft: '24px',
+                                      padding: '8px 12px',
+                                      background: 'rgba(30, 41, 59, 0.8)',
+                                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                                      borderRadius: '6px',
+                                      color: '#e2e8f0',
+                                      fontSize: '12px'
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                            
+                            <button
+                              onClick={() => addCustomField(category)}
+                              style={{
+                                width: '100%',
+                                padding: '10px',
+                                marginTop: '8px',
+                                background: 'rgba(16, 185, 129, 0.1)',
+                                border: '1px dashed rgba(16, 185, 129, 0.4)',
+                                borderRadius: '6px',
+                                color: '#10b981',
+                                cursor: 'pointer',
+                                fontSize: '13px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px'
+                              }}
+                            >
+                              <span>+</span> Ajouter un document personnalisé
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ON DEMANDE - Résultats attendus selon filtrage */}
+                <div style={{ marginBottom: '24px' }}>
+                  <h4 style={{ 
+                    color: '#f59e0b', 
+                    fontSize: '14px', 
+                    fontWeight: 600, 
+                    marginBottom: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span>❓</span> ON DEMANDE (travail à réaliser par l'étudiant)
+                  </h4>
+                  
+                  {currentPole && currentPole.resultatsAttendus && (
+                    <div style={{
+                      background: 'rgba(30, 41, 59, 0.5)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      marginBottom: '16px',
+                      border: '1px solid rgba(245, 158, 11, 0.2)'
+                    }}>
+                      <div style={{ 
+                        color: '#94a3b8', 
+                        fontSize: '12px', 
+                        marginBottom: '12px',
+                        fontStyle: 'italic'
+                      }}>
+                        📋 Résultats attendus du référentiel ({selectedTache}) - formulés à l'indicatif :
+                      </div>
+                      
+                      {Object.entries(currentPole.resultatsAttendus)
+                        .filter(([tacheId]) => tacheId === selectedTache)
+                        .map(([tacheId, resultats]) => (
+                          <div key={tacheId}>
+                            {resultats.map((resultat, idx) => {
+                              const attenduKey = `${tacheId}::${idx}`;
+                              const isSelected = selectedAttendus[attenduKey];
+                              const resultatIndicatif = transformerEnIndicatif(resultat);
+                              const customText = customAttendus[attenduKey];
+                              const hasCustom = customText && customText !== resultatIndicatif;
+                              
+                              return (
+                                <div key={idx} style={{ 
+                                  marginBottom: '10px',
+                                  padding: '12px',
+                                  background: isSelected ? 'rgba(245, 158, 11, 0.1)' : 'rgba(30, 41, 59, 0.3)',
+                                  borderRadius: '8px',
+                                  border: isSelected ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid transparent',
+                                  transition: 'all 0.2s ease'
+                                }}>
+                                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                                    <input
+                                      type="checkbox"
+                                      checked={isSelected || false}
+                                      onChange={() => {
+                                        setSelectedAttendus(prev => ({
+                                          ...prev,
+                                          [attenduKey]: !prev[attenduKey]
+                                        }));
+                                        if (!customAttendus[attenduKey]) {
+                                          setCustomAttendus(prev => ({
+                                            ...prev,
+                                            [attenduKey]: resultatIndicatif
+                                          }));
+                                        }
+                                      }}
+                                      style={{ 
+                                        width: '20px', 
+                                        height: '20px', 
+                                        marginTop: '2px',
+                                        accentColor: '#f59e0b',
+                                        cursor: 'pointer'
+                                      }}
+                                    />
+                                    <div style={{ flex: 1 }}>
+                                      {isSelected ? (
+                                        <textarea
+                                          value={customText || resultatIndicatif}
+                                          onChange={(e) => setCustomAttendus(prev => ({
+                                            ...prev,
+                                            [attenduKey]: e.target.value
+                                          }))}
+                                          style={{
+                                            width: '100%',
+                                            minHeight: '60px',
+                                            padding: '10px',
+                                            background: 'rgba(30, 41, 59, 0.8)',
+                                            border: hasCustom ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(245, 158, 11, 0.3)',
+                                            borderRadius: '6px',
+                                            color: '#e2e8f0',
+                                            fontSize: '13px',
+                                            resize: 'vertical',
+                                            lineHeight: '1.5'
+                                          }}
+                                          placeholder="Personnaliser le texte de l'attendu..."
+                                        />
+                                      ) : (
+                                        <span style={{ 
+                                          color: '#cbd5e1', 
+                                          fontSize: '13px',
+                                          lineHeight: '1.5'
+                                        }}>
+                                          {resultatIndicatif}
+                                        </span>
+                                      )}
+                                      {hasCustom && isSelected && (
+                                        <div style={{
+                                          marginTop: '6px',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          gap: '10px'
+                                        }}>
+                                          <span style={{ 
+                                            color: '#10b981', 
+                                            fontSize: '11px',
+                                            background: 'rgba(16, 185, 129, 0.1)',
+                                            padding: '3px 8px',
+                                            borderRadius: '4px'
+                                          }}>
+                                            ✏️ Personnalisé
+                                          </span>
+                                          <button
+                                            onClick={() => setCustomAttendus(prev => ({
+                                              ...prev,
+                                              [attenduKey]: resultatIndicatif
+                                            }))}
+                                            style={{
+                                              background: 'transparent',
+                                              border: 'none',
+                                              color: '#94a3b8',
+                                              fontSize: '11px',
+                                              cursor: 'pointer',
+                                              textDecoration: 'underline'
+                                            }}
+                                          >
+                                            Réinitialiser
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                  
+                  {/* Attendus personnalisés */}
+                  {customOnDemande.length > 0 && (
+                    <div style={{
+                      background: 'rgba(16, 185, 129, 0.05)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      marginBottom: '16px',
+                      border: '1px solid rgba(16, 185, 129, 0.2)'
+                    }}>
+                      <div style={{ 
+                        color: '#10b981', 
+                        fontSize: '12px', 
+                        marginBottom: '12px',
+                        fontWeight: 600
+                      }}>
+                        ✨ Attendus personnalisés :
+                      </div>
+                      {customOnDemande.map((item) => (
+                        <div key={item.id} style={{ 
+                          marginBottom: '10px',
+                          padding: '10px',
+                          background: 'rgba(16, 185, 129, 0.1)',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(16, 185, 129, 0.2)'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                            <input
+                              type="checkbox"
+                              checked={item.selected}
+                              onChange={() => {
+                                setCustomOnDemande(prev => prev.map(i => 
+                                  i.id === item.id ? {...i, selected: !i.selected} : i
+                                ));
+                              }}
+                              style={{ 
+                                width: '20px', 
+                                height: '20px', 
+                                marginTop: '2px',
+                                accentColor: '#10b981',
+                                cursor: 'pointer'
+                              }}
+                            />
+                            <input
+                              type="text"
+                              value={item.text}
+                              onChange={(e) => {
+                                setCustomOnDemande(prev => prev.map(i => 
+                                  i.id === item.id ? {...i, text: e.target.value} : i
+                                ));
+                              }}
+                              placeholder="Décrire l'attendu personnalisé (commencer par un verbe d'action)..."
+                              style={{
+                                flex: 1,
+                                padding: '10px',
+                                background: 'rgba(30, 41, 59, 0.8)',
+                                border: '1px solid rgba(16, 185, 129, 0.3)',
+                                borderRadius: '6px',
+                                color: '#e2e8f0',
+                                fontSize: '13px'
+                              }}
+                            />
+                            <button
+                              onClick={() => {
+                                setCustomOnDemande(prev => prev.filter(i => i.id !== item.id));
+                              }}
+                              style={{
+                                background: 'rgba(239, 68, 68, 0.2)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)',
+                                borderRadius: '6px',
+                                color: '#ef4444',
+                                padding: '8px 12px',
+                                cursor: 'pointer',
+                                fontSize: '13px'
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Bouton ajouter attendu personnalisé */}
+                  <button
+                    onClick={() => {
+                      setCustomOnDemande(prev => [...prev, {
+                        id: Date.now(),
+                        text: '',
+                        selected: true
+                      }]);
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      marginBottom: '16px',
+                      background: 'rgba(16, 185, 129, 0.1)',
+                      border: '1px dashed rgba(16, 185, 129, 0.4)',
+                      borderRadius: '8px',
+                      color: '#10b981',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span style={{ fontSize: '18px' }}>+</span> Ajouter un attendu personnalisé
+                  </button>
+                  
+                  {/* Champ libre */}
+                  <div>
+                    <div style={{ 
+                      color: '#94a3b8', 
+                      fontSize: '12px', 
+                      marginBottom: '8px',
+                      fontStyle: 'italic'
+                    }}>
+                      📝 Remarques ou précisions supplémentaires (optionnel) :
+                    </div>
+                    <textarea
+                      value={onDemande}
+                      onChange={(e) => setOnDemande(e.target.value)}
+                      placeholder="Notes complémentaires sur le travail demandé..."
+                      style={{
+                        width: '100%',
+                        minHeight: '80px',
+                        padding: '12px',
+                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '1px solid rgba(245, 158, 11, 0.3)',
+                        borderRadius: '8px',
+                        color: '#e2e8f0',
+                        fontSize: '13px',
+                        resize: 'vertical',
+                        lineHeight: '1.5'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Logo du lycée et Connaissances globales */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr 1fr', 
+                  gap: '24px',
+                  marginBottom: '24px'
+                }}>
+                  {/* LOGO DU LYCÉE */}
+                  <div>
+                    <h4 style={{ 
+                      color: '#06b6d4', 
+                      fontSize: '14px', 
+                      fontWeight: 600, 
+                      marginBottom: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <span>🏫</span> LOGO DU LYCÉE
+                    </h4>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '16px',
+                      padding: '16px',
+                      background: 'rgba(30, 41, 59, 0.5)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(6, 182, 212, 0.3)'
+                    }}>
+                      <label style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 16px',
+                        background: 'rgba(6, 182, 212, 0.2)',
+                        border: '1px solid rgba(6, 182, 212, 0.4)',
+                        borderRadius: '6px',
+                        color: '#06b6d4',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                        fontWeight: 500
+                      }}>
+                        <span>📤</span> Télécharger
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleLogoUpload}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                      {logoLycee && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <img 
+                            src={logoLycee} 
+                            alt="Logo Lycée" 
+                            style={{ 
+                              height: '50px', 
+                              borderRadius: '4px',
+                              border: '1px solid rgba(6, 182, 212, 0.3)'
+                            }} 
+                          />
+                          <button
+                            onClick={() => setLogoLycee(null)}
+                            style={{
+                              background: 'rgba(239, 68, 68, 0.2)',
+                              border: '1px solid rgba(239, 68, 68, 0.3)',
+                              borderRadius: '4px',
+                              color: '#ef4444',
+                              padding: '6px 10px',
+                              cursor: 'pointer',
+                              fontSize: '11px'
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      )}
+                      {!logoLycee && (
+                        <span style={{ color: '#64748b', fontSize: '12px', fontStyle: 'italic' }}>
+                          Aucun logo
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CONNAISSANCES GLOBALES */}
+                  <div>
+                    <h4 style={{ 
+                      color: '#4ade80', 
+                      fontSize: '14px', 
+                      fontWeight: 600, 
+                      marginBottom: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <span>📚</span> CONNAISSANCES GLOBALES
+                    </h4>
+                    <div style={{
+                      background: 'rgba(30, 41, 59, 0.5)',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      maxHeight: '150px',
+                      overflowY: 'auto'
+                    }}>
+                      {connaissancesGlobales.map(savoir => {
+                        const isLinked = availableCompetences.some(comp => savoir.competences.includes(comp.id));
+                        if (!isLinked) return null;
+                        return (
+                          <label 
+                            key={savoir.id}
+                            style={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: '8px',
+                              cursor: 'pointer',
+                              padding: '6px 8px',
+                              borderRadius: '4px',
+                              background: selectedSavoirs[savoir.id] ? 'rgba(74, 222, 128, 0.15)' : 'transparent',
+                              marginBottom: '4px'
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedSavoirs[savoir.id] || false}
+                              onChange={() => setSelectedSavoirs(prev => ({
+                                ...prev,
+                                [savoir.id]: !prev[savoir.id]
+                              }))}
+                              style={{ 
+                                width: '16px', 
+                                height: '16px', 
+                                accentColor: '#4ade80'
+                              }}
+                            />
+                            <span style={{ 
+                              color: '#4ade80', 
+                              fontWeight: 600,
+                              fontSize: '11px'
+                            }}>
+                              {savoir.id}.
+                            </span>
+                            <span style={{ 
+                              color: '#e2e8f0', 
+                              fontSize: '12px' 
+                            }}>
+                              {savoir.nom}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bouton Export PDF */}
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  paddingTop: '20px',
+                  borderTop: '1px solid rgba(148, 163, 184, 0.2)'
+                }}>
+                  <button
+                    onClick={exportToPDF}
+                    style={{
+                      background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      color: 'white',
+                      padding: '16px 40px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      boxShadow: '0 4px 20px rgba(239, 68, 68, 0.3)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 6px 25px rgba(239, 68, 68, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 20px rgba(239, 68, 68, 0.3)';
+                    }}
+                  >
+                    <span style={{ fontSize: '20px' }}>📥</span>
+                    Exporter en PDF
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Legend */}
         <div className="glass-card" style={{ 
