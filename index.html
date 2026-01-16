@@ -821,11 +821,11 @@ function FormulaireBTSEBCR() {
     }
   };
 
-  // Fonction pour transformer les résultats attendus passifs en phrases indicatives actives
-  const transformerEnIndicatif = (texte) => {
-    // Dictionnaire de transformations passif -> indicatif actif
+  // Fonction pour transformer les résultats attendus passifs en consignes à l'infinitif (verbe d'action)
+  const transformerEnInfinitif = (texte) => {
+    // Dictionnaire de transformations passif -> infinitif actif
     const transformations = [
-      // Patterns avec "est/sont + participe passé" -> verbe actif
+      // Patterns avec "est/sont + participe passé" -> verbe à l'infinitif
       { pattern: /^Une synthèse globale justifiée et structurée est rédigée/i, replacement: "Rédiger une synthèse globale justifiée et structurée" },
       { pattern: /^Les plans de structure sont produits$/i, replacement: "Produire les plans de structure" },
       { pattern: /^Les éléments porteurs et leurs impacts sont identifiés$/i, replacement: "Identifier les éléments porteurs et leurs impacts" },
@@ -903,7 +903,7 @@ function FormulaireBTSEBCR() {
       { pattern: /^Les non conformités sont identifiées/i, replacement: "Identifier et traiter les non-conformités" },
     ];
 
-    // Appliquer les transformations
+    // Appliquer les transformations spécifiques
     for (const { pattern, replacement } of transformations) {
       if (pattern.test(texte)) {
         return replacement;
@@ -911,7 +911,7 @@ function FormulaireBTSEBCR() {
     }
 
     // Si aucune transformation spécifique, tenter une transformation générique
-    // Pattern: "X est/sont + participe" -> "Verbe + X"
+    // Pattern: "X est/sont + participe" -> "Verbe à l'infinitif + X"
     const genericPatterns = [
       { pattern: /^(.+?)\s+(?:est|sont)\s+(réalisé|réalisée|réalisés|réalisées)$/i, verb: "Réaliser" },
       { pattern: /^(.+?)\s+(?:est|sont)\s+(défini|définie|définis|définies)$/i, verb: "Définir" },
@@ -925,6 +925,26 @@ function FormulaireBTSEBCR() {
       { pattern: /^(.+?)\s+(?:est|sont)\s+(produit|produite|produits|produites)$/i, verb: "Produire" },
       { pattern: /^(.+?)\s+(?:est|sont)\s+(transmis|transmise)$/i, verb: "Transmettre" },
       { pattern: /^(.+?)\s+(?:est|sont)\s+(renseigné|renseignée|renseignés|renseignées)$/i, verb: "Renseigner" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(évalué|évaluée|évalués|évaluées)$/i, verb: "Évaluer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(optimisé|optimisée|optimisés|optimisées)$/i, verb: "Optimiser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(anticipé|anticipée|anticipés|anticipées)$/i, verb: "Anticiper" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(suivi|suivie|suivis|suivies)$/i, verb: "Suivre" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(actualisé|actualisée|actualisés|actualisées)$/i, verb: "Actualiser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(constitué|constituée|constitués|constituées)$/i, verb: "Constituer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(organisé|organisée|organisés|organisées)$/i, verb: "Organiser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(rédigé|rédigée|rédigés|rédigées)$/i, verb: "Rédiger" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(effectué|effectuée|effectués|effectuées)$/i, verb: "Effectuer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(matérialisé|matérialisée|matérialisés|matérialisées)$/i, verb: "Matérialiser" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(rempli|remplie|remplis|remplies)$/i, verb: "Remplir" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(levé|levée|levés|levées)$/i, verb: "Lever" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(intégré|intégrée|intégrés|intégrées)$/i, verb: "Intégrer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(budgété|budgétée|budgétés|budgétées)$/i, verb: "Budgéter" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(consulté|consultée|consultés|consultées)$/i, verb: "Consulter" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(demandé|demandée|demandés|demandées)$/i, verb: "Demander" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(informé|informée|informés|informées)$/i, verb: "Informer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(comparé|comparée|comparés|comparées)$/i, verb: "Comparer" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(relevé|relevée|relevés|relevées)$/i, verb: "Relever" },
+      { pattern: /^(.+?)\s+(?:est|sont)\s+(proposé|proposée|proposés|proposées)$/i, verb: "Proposer" },
     ];
 
     for (const { pattern, verb } of genericPatterns) {
@@ -1908,7 +1928,7 @@ function FormulaireBTSEBCR() {
             color: '#64748b',
             margin: 0
           }}>
-            Jean-Philippe Amat — v1.4 — 2026
+            Jean-Philippe Amat — v1.7 — 2026
           </p>
         </div>
 
@@ -2587,7 +2607,7 @@ function FormulaireBTSEBCR() {
                 marginBottom: '20px'
               }}>
                 <div style={{ color: '#94a3b8', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
-                  🎯 Résultats attendus de la tâche {selectedTache} <span style={{ fontStyle: 'italic', textTransform: 'none', fontSize: '10px' }}>(formulés à l'indicatif)</span>
+                  🎯 Résultats attendus de la tâche {selectedTache} <span style={{ fontStyle: 'italic', textTransform: 'none', fontSize: '10px' }}>(consignes à l'infinitif)</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {currentPole.resultatsAttendus[selectedTache].map((resultat, i) => (
@@ -2604,7 +2624,7 @@ function FormulaireBTSEBCR() {
                         fontSize: '14px',
                         marginTop: '1px'
                       }}>•</span>
-                      <span style={{ color: '#e2e8f0', fontSize: '13px', lineHeight: '1.4' }}>{transformerEnIndicatif(resultat)}</span>
+                      <span style={{ color: '#e2e8f0', fontSize: '13px', lineHeight: '1.4' }}>{transformerEnInfinitif(resultat)}</span>
                     </div>
                   ))}
                 </div>
@@ -2933,7 +2953,7 @@ function FormulaireBTSEBCR() {
                         marginBottom: '12px',
                         fontStyle: 'italic'
                       }}>
-                        📋 Résultats attendus du référentiel ({selectedTache}) - formulés à l'indicatif :
+                        📋 Résultats attendus du référentiel ({selectedTache}) - consignes à l'infinitif :
                       </div>
                       
                       {Object.entries(currentPole.resultatsAttendus)
@@ -2943,9 +2963,9 @@ function FormulaireBTSEBCR() {
                             {resultats.map((resultat, idx) => {
                               const attenduKey = `${tacheId}::${idx}`;
                               const isSelected = selectedAttendus[attenduKey];
-                              const resultatIndicatif = transformerEnIndicatif(resultat);
+                              const resultatInfinitif = transformerEnInfinitif(resultat);
                               const customText = customAttendus[attenduKey];
-                              const hasCustom = customText && customText !== resultatIndicatif;
+                              const hasCustom = customText && customText !== resultatInfinitif;
                               
                               return (
                                 <div key={idx} style={{ 
@@ -2968,7 +2988,7 @@ function FormulaireBTSEBCR() {
                                         if (!customAttendus[attenduKey]) {
                                           setCustomAttendus(prev => ({
                                             ...prev,
-                                            [attenduKey]: resultatIndicatif
+                                            [attenduKey]: resultatInfinitif
                                           }));
                                         }
                                       }}
@@ -2983,7 +3003,7 @@ function FormulaireBTSEBCR() {
                                     <div style={{ flex: 1 }}>
                                       {isSelected ? (
                                         <textarea
-                                          value={customText || resultatIndicatif}
+                                          value={customText || resultatInfinitif}
                                           onChange={(e) => setCustomAttendus(prev => ({
                                             ...prev,
                                             [attenduKey]: e.target.value
@@ -3008,7 +3028,7 @@ function FormulaireBTSEBCR() {
                                           fontSize: '13px',
                                           lineHeight: '1.5'
                                         }}>
-                                          {resultatIndicatif}
+                                          {resultatInfinitif}
                                         </span>
                                       )}
                                       {hasCustom && isSelected && (
@@ -3030,7 +3050,7 @@ function FormulaireBTSEBCR() {
                                           <button
                                             onClick={() => setCustomAttendus(prev => ({
                                               ...prev,
-                                              [attenduKey]: resultatIndicatif
+                                              [attenduKey]: resultatInfinitif
                                             }))}
                                             style={{
                                               background: 'transparent',
